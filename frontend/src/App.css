@@ -59,7 +59,7 @@ a, u {
 
 
 .background {
-  background-image: url("./images/background1.png");
+  background-image: url("./images/background3.png");
   background-size: cover;
   background-position: center;
   height: calc(100vh - 100px); /* Usa la altura del viewport y resta 20px */
@@ -73,8 +73,8 @@ a, u {
   color: #E6E8E7;
   font-family: "Avenir";
   position: relative;
-
-
+  -webkit-text-stroke: 0.3px black;  /* Resplandor blanco con media transparencia */
+  text-shadow: 2px 2px 8px rgba(0, 0, 0, 0.8);
 }
 
 .search-title .title {

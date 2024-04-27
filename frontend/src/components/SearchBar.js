@@ -20,7 +20,7 @@ const SearchBar = (props) => {
               <div class="inner-form">
                 <div class="basic-search">
                   <div class="input-field">
-                    <input  value={searchValue} onChange={handleSearchInputChanges} type="text" placeholder = "Describe the company type you are interested in"/>
+                    <input  value={searchValue} onChange={handleSearchInputChanges} type="text" placeholder = "Describe your target company..."/>
                     <div class="icon-wrap">
                       <img src={searchIcon} width="24" height="24"  onClick={callSearchFunction} type="submit" value="SEARCH" >
 

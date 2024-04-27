@@ -30,7 +30,7 @@ const App = () => {
                 The LinkedIn Agent
               </div>
               <div class= 'subtitle'>
-                Find your potential clients on LinkedIn
+                Unleash the power of AI to discover your business opportunities
               </div>
           </div>
           <SearchBar />
