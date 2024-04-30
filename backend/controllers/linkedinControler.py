@@ -85,9 +85,7 @@ def company_listing(driver:webdriver.Chrome, n_pages:int = 100) -> list:
                 # driver.execute_script("arguments[0].click();", next_btn)
                 next_btn.click()
                 print("Clicked")
-                # Wait for page transition to complete before continuing to parse
-                # wait.until(EC.staleness_of(company_links[0]))
-                time.sleep(2)
+                time.sleep(1)
                 loop = loop +1
             else:
                 print("El botón 'Siguiente' está deshabilitado o no se encontró.")
@@ -99,14 +97,53 @@ def company_listing(driver:webdriver.Chrome, n_pages:int = 100) -> list:
 
     return hrefs
 
-def company_scrapping(url_link:str, driver:webdriver.Chrome)->str:
+def company_scrapping(url_link: str, driver: webdriver.Chrome) -> dict:
+    """
+    Scrapes detailed information from a LinkedIn company page using a webdriver.
 
-    company_info = Company(linkedin_url=url_link,driver=driver, get_employees=False)
-    return(company_info)
+    Args:
+    url_link (str): The URL link to the LinkedIn company page.
+    driver (webdriver.Chrome): A webdriver instance used to perform web scraping.
+
+    Returns:
+    dict: A dictionary containing the company information.
+    """
+    # Initialize a Company object to scrape data
+    company_info = Company(linkedin_url=url_link, driver=driver, get_employees=False,close_on_complete=False)
+    # Return the company information (here assuming it's a dict)
+    return company_info
+
+def company_orchestrator(driver:webdriver.Chrome, companies:list)->dict:
+    """
+    Orchestrates the process of scraping multiple LinkedIn company pages.
+
+    Args:
+    driver (webdriver.Chrome): A webdriver instance used to perform web scraping.
+    companies (list): A list of URLs to LinkedIn company pages.
+
+    Returns:
+    dict: A dictionary with company names as keys and their scraped information as values.
+    """
+    # Initialize a dictionary to store company information
+    companies_db = dict()
+
+    # Loop over each company URL in the list
+    for url in companies:
+        # Scrape the company information using the company_scrapping function
+        company_info = company_scrapping(url, driver)
+        # Extract the company name from the URL
+        name = url.split('/company/')[-1].rstrip('/')
+        # Store the company information in the dictionary with the company name as the key
+        companies_db[name] = company_info
+    
+    # Return the dictionary containing all the scraped company data
+    return companies_db
+
 
 
 if __name__ == "__main__":
     driver = login()
-    hrefs = company_listing(driver=driver,n_pages=1)
-    company_info = company_scrapping(url_link=hrefs[0],driver=driver)
-    print(company_info)
+    hrefs = company_listing(driver=driver,n_pages=3)
+    print(hrefs)
+    companies_info = company_orchestrator(driver=driver, companies=hrefs[:10])
+    print(companies_info)

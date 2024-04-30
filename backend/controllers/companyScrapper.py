@@ -97,6 +97,7 @@ class Company(Scraper):
         self.specialties = specialties
         self.showcase_pages = showcase_pages
         self.affiliated_companies = affiliated_companies
+        self.image = None
 
         # Initialize or set up the web driver
         if driver is None:
@@ -233,6 +234,13 @@ class Company(Scraper):
         _ = WebDriverWait(driver, 3).until(EC.presence_of_all_elements_located((By.TAG_NAME, 'section')))
         time.sleep(3)
 
+        try:
+            logo_container = driver.find_element(By.CLASS_NAME, "org-top-card-primary-content__logo-container")
+            self.image = logo_container.find_element(By.TAG_NAME, "img").get_attribute('src')
+        except Exception as e:
+            print("Not image found")
+            self.image = None
+
         if 'Cookie Policy' in driver.find_elements(By.TAG_NAME, "section")[1].text or any(classname in driver.find_elements(By.TAG_NAME, "section")[1].get_attribute('class') for classname in AD_BANNER_CLASSNAME):
             section_id = 4
         else:
@@ -247,9 +255,6 @@ class Company(Scraper):
         labels = grid.find_elements(By.TAG_NAME, "dt")
         values = grid.find_elements(By.TAG_NAME, "dd")
         num_attributes = min(len(labels), len(values))
-        #print("The length of the labels is " + str(len(labels)), "The length of the values is " + str(len(values)))
-        # if num_attributes == 0:
-        #     exit()
         x_off = 0
         for i in range(num_attributes):
             txt = labels[i].text.strip()
@@ -393,5 +398,9 @@ class Company(Scraper):
         _output['affiliated_companies'] = self.affiliated_companies
         _output['employees'] = self.employees
         _output['headcount'] = self.headcount
+        _output['image']=self.image
+        _output['potential_customer']=None
+        _output['reason']=None
+        _output['contact_people']=None
         
         return json.dumps(_output).replace('\n', '')
