@@ -6,12 +6,14 @@ from selenium.webdriver.common.by import By
 from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
 import time
+print(os.getcwd())
+from companyScrapper import Company
 
 
 # Defining variables
 URL = r"https://www.linkedin.com/search/results/companies/?companyHqGeo=%5B%22100506914%22%5D&companySize=%5B%22D%22%2C%22E%22%2C%22F%22%2C%22G%22%5D&industryCompanyVertical=%5B%221810%22%5D&origin=FACETED_SEARCH&sid=%2C0g"
 
-def login():
+def login() -> webdriver.Chrome:
     """
     Logs into LinkedIn using environmental variables for credentials.
 
@@ -49,7 +51,7 @@ def login():
     return driver
 
 
-def company_listing(driver):
+def company_listing(driver:webdriver.Chrome, n_pages:int = 100) -> list:
     """
     Navigates through LinkedIn search result pages by scrolling to the bottom, clicking on the 'Next' button,
     and extracts company listing URLs from all available pages.
@@ -59,6 +61,9 @@ def company_listing(driver):
     wait = WebDriverWait(driver, 10)
     loop = 0
     while True:
+        # Checking whether the number of pages has been reached
+        if loop >= n_pages:
+            break
         # Scroll to the bottom of the page
         driver.execute_script("window.scrollTo(0, document.body.scrollHeight);")
         time.sleep(1)  # Allow time for any lazy-loaded content to load
@@ -94,7 +99,14 @@ def company_listing(driver):
 
     return hrefs
 
+def company_scrapping(url_link:str, driver:webdriver.Chrome)->str:
+
+    company_info = Company(linkedin_url=url_link,driver=driver, get_employees=False)
+    return(company_info)
+
+
 if __name__ == "__main__":
     driver = login()
-    hrefs = company_listing(driver=driver)
-    print(hrefs)
+    hrefs = company_listing(driver=driver,n_pages=1)
+    company_info = company_scrapping(url_link=hrefs[0],driver=driver)
+    print(company_info)
