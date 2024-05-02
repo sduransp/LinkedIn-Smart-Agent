@@ -147,6 +147,61 @@ class Company(Scraper):
             return None
 
     def get_employees(self, wait_time=10):
+        """
+        Retrieve and return a list of employees from the company LinkedIn page.
+
+        This function navigates to a specific LinkedIn company page, scrolls to the top,
+        waits for the page to stabilize, and then searches for a specific link that contains
+        the text 'employees' within a span. This link is used to navigate to the employees list.
+        
+        Returns:
+            total (list): A list of employee details (currently not implemented fully).
+        """
+
+        total = []  # List to hold employee details
+        list_css = "list-style-none"  # CSS selector for the list (unused, placeholder for future use)
+        next_xpath = '//button[@aria-label="Next"]'  # XPath for the 'Next' button (unused, placeholder for future use)
+        driver = self.driver  # WebDriver instance
+
+        try:
+            # Scroll to the top of the page to ensure visibility of all elements
+            driver.execute_script("window.scrollTo(0, 0);")
+            # Wait for the page to stabilize after the scroll
+            WebDriverWait(driver, 2).until(
+                EC.presence_of_element_located((By.TAG_NAME, "body"))
+            )
+            # Variable to store the link to the employees page
+            href = None  
+
+            # Find all links that could potentially lead to the employees page
+            elements = driver.find_elements(By.CSS_SELECTOR, "a.ember-view.org-top-card-summary-info-list__info-item")
+            for element in elements:
+                # Get the text within the span inside the link to check if it contains 'employees'
+                span_text = element.find_element(By.TAG_NAME, "span").text
+                if 'employees' in span_text:
+                    # Get the href attribute if the span text indicates this is the employees link
+                    href = element.get_attribute('href')
+                    # Stop looking for other links once the correct one is found
+                    break  
+
+            # Navigate to the href if it was found
+            if href:
+                driver.get(href)
+                # Loop page by page collecting all url links to employees
+
+                # Append those links to total list
+
+                # Return list
+            else:
+                print("No employee link found on the page.")
+
+        
+        except Exception as e:
+            print(f"Error while finding the employee URL link, please check the HTML structure: {e}.")
+        time.sleep(10)
+
+
+    def get_employees_old(self, wait_time=10):
         """Retrieve and return a list of employees from the company LinkedIn page."""
         total = []
         list_css = "list-style-none"

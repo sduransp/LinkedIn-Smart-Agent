@@ -6,7 +6,6 @@ from selenium.webdriver.common.by import By
 from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
 import time
-print(os.getcwd())
 from companyScrapper import Company
 
 
@@ -109,7 +108,7 @@ def company_scrapping(url_link: str, driver: webdriver.Chrome) -> dict:
     dict: A dictionary containing the company information.
     """
     # Initialize a Company object to scrape data
-    company_info = Company(linkedin_url=url_link, driver=driver, get_employees=False,close_on_complete=False)
+    company_info = Company(linkedin_url=url_link, driver=driver, get_employees=True,close_on_complete=False)
     # Return the company information (here assuming it's a dict)
     return company_info
 
