@@ -11,6 +11,7 @@ sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '..')))
 from models.linkedin import Scraper
 import time
 import json
+from bs4 import BeautifulSoup
 
 # Constants used for ad banner detection
 AD_BANNER_CLASSNAME = ('ad-banner-container', '__ad')
@@ -148,121 +149,82 @@ class Company(Scraper):
 
     def get_employees(self, wait_time=10):
         """
-        Retrieve and return a list of employees from the company LinkedIn page.
+            Retrieve and return a list of employee profile URLs from a company's LinkedIn page.
 
-        This function navigates to a specific LinkedIn company page, scrolls to the top,
-        waits for the page to stabilize, and then searches for a specific link that contains
-        the text 'employees' within a span. This link is used to navigate to the employees list.
-        
-        Returns:
-            total (list): A list of employee details (currently not implemented fully).
+            This function navigates to a specific LinkedIn company page, ensures that the page is
+            fully loaded, and then navigates to the employees' section. It collects all employee
+            profile URLs across all pages of the listing.
+
+            Args:
+                wait_time (int): Time in seconds to wait for page elements to load fully, default is 10 seconds.
+
+            Returns:
+                list: A list of URLs to employee profiles.
         """
 
-        total = []  # List to hold employee details
-        list_css = "list-style-none"  # CSS selector for the list (unused, placeholder for future use)
-        next_xpath = '//button[@aria-label="Next"]'  # XPath for the 'Next' button (unused, placeholder for future use)
-        driver = self.driver  # WebDriver instance
+        employee_urls = []  # List to hold employee profile URLs
+        driver = self.driver  # Selenium WebDriver instance
 
-        try:
-            # Scroll to the top of the page to ensure visibility of all elements
-            driver.execute_script("window.scrollTo(0, 0);")
-            # Wait for the page to stabilize after the scroll
-            WebDriverWait(driver, 2).until(
-                EC.presence_of_element_located((By.TAG_NAME, "body"))
-            )
-            # Variable to store the link to the employees page
-            href = None  
+        # Scroll to the top of the page to ensure visibility of all elements
+        driver.execute_script("window.scrollTo(0, 0);")
+        WebDriverWait(driver, 2).until(
+            EC.presence_of_element_located((By.TAG_NAME, "body"))
+        )
 
-            # Find all links that could potentially lead to the employees page
-            elements = driver.find_elements(By.CSS_SELECTOR, "a.ember-view.org-top-card-summary-info-list__info-item")
-            for element in elements:
-                # Get the text within the span inside the link to check if it contains 'employees'
-                span_text = element.find_element(By.TAG_NAME, "span").text
-                if 'employees' in span_text:
-                    # Get the href attribute if the span text indicates this is the employees link
-                    href = element.get_attribute('href')
-                    # Stop looking for other links once the correct one is found
-                    break  
+        # Attempt to find the link to the employees listing page
+        href = None
+        employee_links = driver.find_elements(
+            By.CSS_SELECTOR, "a.ember-view.org-top-card-summary-info-list__info-item"
+        )
+        for link in employee_links:
+            if 'employees' in link.find_element(By.TAG_NAME, "span").text:
+                href = link.get_attribute('href')
+                break
 
-            # Navigate to the href if it was found
-            if href:
-                driver.get(href)
-                # Loop page by page collecting all url links to employees
+        if href:
+            driver.get(href)
+            wait = WebDriverWait(driver, wait_time)
 
-                # Append those links to total list
-
-                # Return list
-            else:
-                print("No employee link found on the page.")
-
-        
-        except Exception as e:
-            print(f"Error while finding the employee URL link, please check the HTML structure: {e}.")
-        time.sleep(10)
+            # Loop to navigate through all pages and collect employee profile links
+            while True:
+                wait.until(
+                EC.presence_of_all_elements_located((By.CSS_SELECTOR, "ul.reusable-search__entity-result-list"))
+                )
+                # Extract all profile links that contain '/in/' in the current page
+                profiles = driver.find_elements(
+                    By.CSS_SELECTOR, "li.reusable-search__result-container a.app-aware-link[data-test-app-aware-link]:not([aria-hidden='true'])"
+                )
+                
+                print("Total profiles found:", len(profiles))
 
 
-    def get_employees_old(self, wait_time=10):
-        """Retrieve and return a list of employees from the company LinkedIn page."""
-        total = []
-        list_css = "list-style-none"
-        next_xpath = '//button[@aria-label="Next"]'
-        driver = self.driver
+                for profile in profiles:
 
-        try:
-            see_all_employees = driver.find_element(By.XPATH,'//a[@data-control-name="topcard_see_all_employees"]')
-        except:
-            pass
-        driver.get(os.path.join(self.linkedin_url, "people"))
+                    # Obtener URL del perfil
+                    profile_url = profile.get_attribute('href')
+                    profile_link = driver.find_element(By.CSS_SELECTOR, "a.app-aware-link.scale-down[aria-hidden='true']")
+                    profile_url = profile_link.get_attribute('href')
 
-        _ = WebDriverWait(driver, 3).until(EC.presence_of_all_elements_located((By.XPATH, '//span[@dir="ltr"]')))
+                    # Agregar el URL al listado si cumple la condición
+                    if "/in/" in str(profile_url):
+                        employee_urls.append(profile_url)
 
-        driver.execute_script("window.scrollTo(0, Math.ceil(document.body.scrollHeight/2));")
-        time.sleep(1)
-        driver.execute_script("window.scrollTo(0, Math.ceil(document.body.scrollHeight*3/4));")
-        time.sleep(1)
+                print(employee_urls)
+                driver.execute_script("window.scrollTo(0, document.body.scrollHeight);")
+                time.sleep(1)
+                # Navigate to the next page if possible
+                try:
+                    next_button = driver.find_element(By.CSS_SELECTOR, "button.artdeco-pagination__button--next")
+                    if "disabled" in next_button.get_attribute("class"):
+                        break  # Stop if 'Next' button is disabled
+                    next_button.click()
+                except NoSuchElementException:
+                    print("No next page button found. Ending pagination.")
+                    break
+        else:
+            print("Employee link not found on the page.")
 
-        results_list = driver.find_element(By.CLASS_NAME, list_css)
-        results_li = results_list.find_elements(By.TAG_NAME, "li")
-        for res in results_li:
-            total.append(self.__parse_employee__(res))
-
-        def is_loaded(previous_results):
-          loop = 0
-          driver.execute_script("window.scrollTo(0, Math.ceil(document.body.scrollHeight));")
-          results_li = results_list.find_elements(By.TAG_NAME, "li")
-          while len(results_li) == previous_results and loop <= 5:
-            time.sleep(1)
-            driver.execute_script("window.scrollTo(0, Math.ceil(document.body.scrollHeight));")
-            results_li = results_list.find_elements(By.TAG_NAME, "li")
-            loop += 1
-          return loop <= 5
-
-        def get_data(previous_results):
-            results_li = results_list.find_elements(By.TAG_NAME, "li")
-            for res in results_li[previous_results:]:
-                total.append(self.__parse_employee__(res))
-
-        results_li_len = len(results_li)
-        while is_loaded(results_li_len):
-            try:
-                driver.find_element(By.XPATH,next_xpath).click()
-            except:
-                pass
-            _ = WebDriverWait(driver, wait_time).until(EC.presence_of_element_located((By.CLASS_NAME, list_css)))
-
-            driver.execute_script("window.scrollTo(0, Math.ceil(document.body.scrollHeight/2));")
-            time.sleep(1)
-            driver.execute_script("window.scrollTo(0, Math.ceil(document.body.scrollHeight*2/3));")
-            time.sleep(1)
-            driver.execute_script("window.scrollTo(0, Math.ceil(document.body.scrollHeight*3/4));")
-            time.sleep(1)
-            driver.execute_script("window.scrollTo(0, Math.ceil(document.body.scrollHeight));")
-            time.sleep(1)
-
-            get_data(results_li_len)
-            results_li_len = len(total)
-        return total
-
+        return employee_urls
 
 
     def scrape_logged_in(self, get_employees = True, close_on_complete = True):
