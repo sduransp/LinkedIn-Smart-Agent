@@ -142,7 +142,7 @@ def company_orchestrator(driver:webdriver.Chrome, companies:list)->dict:
 
 if __name__ == "__main__":
     driver = login()
-    hrefs = company_listing(driver=driver,n_pages=3)
-    print(hrefs)
-    companies_info = company_orchestrator(driver=driver, companies=hrefs[:10])
+    hrefs = company_listing(driver=driver,n_pages=1)
+    print(f"The amount of companies scrapped is: {len(hrefs)}")
+    companies_info = company_orchestrator(driver=driver, companies=hrefs)
     print(companies_info)
