@@ -7,6 +7,7 @@ from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
 import time
 from companyScrapper import Company
+from gptControler import company_evaluation
 
 
 # Defining variables
@@ -108,20 +109,24 @@ def company_scrapping(url_link: str, driver: webdriver.Chrome) -> dict:
     dict: A dictionary containing the company information.
     """
     # Initialize a Company object to scrape data
-    company_info = Company(linkedin_url=url_link, driver=driver, get_employees=True,close_on_complete=False)
+    company_info = Company(linkedin_url=url_link, driver=driver, get_employees=False,close_on_complete=False)
     # Return the company information (here assuming it's a dict)
     return company_info
 
-def company_orchestrator(driver:webdriver.Chrome, companies:list)->dict:
+def company_orchestrator(driver:webdriver.Chrome, companies:list, requirements:str, threshold:float = 0.7)->tuple:
     """
-    Orchestrates the process of scraping multiple LinkedIn company pages.
+    Orchestrates the process of scraping, evaluating, and filtering LinkedIn company pages based on given requirements and a suitability threshold.
 
     Args:
-    driver (webdriver.Chrome): A webdriver instance used to perform web scraping.
+    driver (WebDriver): A webdriver instance used to perform web scraping.
     companies (list): A list of URLs to LinkedIn company pages.
+    requirements (str): Description of the desired company profile for evaluation.
+    threshold (float): The score threshold to determine if a company is suitable for selection.
 
     Returns:
-    dict: A dictionary with company names as keys and their scraped information as values.
+    tuple: A tuple containing two dictionaries:
+           1. Dictionary with all company names as keys and their scraped information as values.
+           2. Dictionary with only suitable company names (based on the threshold) as keys and their scraped information as values.
     """
     # Initialize a dictionary to store company information
     companies_db = dict()
@@ -134,9 +139,29 @@ def company_orchestrator(driver:webdriver.Chrome, companies:list)->dict:
         name = url.split('/company/')[-1].rstrip('/')
         # Store the company information in the dictionary with the company name as the key
         companies_db[name] = company_info
+
+        # grabbing company information
+        name = company_info['about_us']
+        about_us = company_info['about_us']
+        specialties = company_info['specialties']
+        industry = company_info['industry']
+        # Putting all info together
+        company_description = f"Company Name: {name}\nAbout Us: {about_us}\nSpecialties: {specialties}\nIndustry: {industry}"
+        # Performing company evaluation
+        score,reason = company_evaluation(requirements=requirements, company_description=company_description)
+        # Saving data into data structure
+        company_info['potential_customer'] = score
+        company_info['reason'] = reason
     
+    # filtering not-suitable companies
+    selected_companies = {}
+    for name, info in companies_db.items():
+        # Check if the score is greater than the threshold and if so, add to the new dictionary
+        if info['potential_customer'] > threshold:
+            selected_companies[name] = info
+
     # Return the dictionary containing all the scraped company data
-    return companies_db
+    return companies_db, selected_companies
 
 
 
@@ -144,5 +169,5 @@ if __name__ == "__main__":
     driver = login()
     hrefs = company_listing(driver=driver,n_pages=1)
     print(f"The amount of companies scrapped is: {len(hrefs)}")
-    companies_info = company_orchestrator(driver=driver, companies=hrefs)
-    print(companies_info)
+    company_db, selected_companies = company_orchestrator(driver=driver, companies=hrefs)
+    print(selected_companies)
