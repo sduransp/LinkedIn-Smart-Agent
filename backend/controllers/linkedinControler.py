@@ -97,7 +97,7 @@ def company_listing(driver:webdriver.Chrome, n_pages:int = 100) -> list:
 
     return hrefs
 
-def company_scrapping(url_link: str, driver: webdriver.Chrome) -> dict:
+def company_scrapping(url_link: str, driver: webdriver.Chrome) -> Company:
     """
     Scrapes detailed information from a LinkedIn company page using a webdriver.
 
@@ -128,46 +128,75 @@ def company_orchestrator(driver:webdriver.Chrome, companies:list, requirements:s
            1. Dictionary with all company names as keys and their scraped information as values.
            2. Dictionary with only suitable company names (based on the threshold) as keys and their scraped information as values.
     """
-    # Initialize a dictionary to store company information
-    companies_db = dict()
+    # # Initialize a dictionary to store company information
+    # companies_db = dict()
 
-    # Loop over each company URL in the list
+    # # Loop over each company URL in the list
+    # for url in companies:
+    #     # Scrape the company information using the company_scrapping function
+    #     company_info = company_scrapping(url, driver)
+    #     # Extract the company name from the URL
+    #     name = url.split('/company/')[-1].rstrip('/')
+
+    #     # grabbing company information
+    #     name = company_info.name
+    #     about_us = company_info.about_us
+    #     specialties = company_info.specialties
+    #     industry = company_info.industry
+    #     # Putting all info together
+    #     company_description = f"Company Name: {name}\nAbout Us: {about_us}\nSpecialties: {specialties}\nIndustry: {industry}"
+
+    #     print(f"Company description: {company_description}")
+    #     # Performing company evaluation
+    #     score,reason = company_evaluation(requirements=requirements, company_description=company_description)
+    #     # Saving data into data structure
+    #     company_info.potential_customer = score
+    #     company_info.reason = reason
+
+    #     # Store the company information in the dictionary with the company name as the key
+    #     companies_db[name] = company_info
+    
+    # # filtering not-suitable companies
+    # selected_companies = {}
+    # for name, info in companies_db.items():
+    #     print(name)
+    #     print(info)
+
+    #     # Check if the score is greater than the threshold and if so, add to the new dictionary
+    #     if info.potential_customer > threshold:
+    #         selected_companies[name] = info
+
+    # # Return the dictionary containing all the scraped company data
+    # return companies_db, selected_companies
+    companies_db = {}
+    selected_companies = {}
+
     for url in companies:
-        # Scrape the company information using the company_scrapping function
         company_info = company_scrapping(url, driver)
-        # Extract the company name from the URL
-        name = url.split('/company/')[-1].rstrip('/')
-        # Store the company information in the dictionary with the company name as the key
+        name = company_info.name
+        company_description = f"Company Name: {name}\nAbout Us: {company_info.about_us}\nSpecialties: {company_info.specialties}\nIndustry: {company_info.industry}"
+
+        score, reason = company_evaluation(requirements=requirements, company_description=company_description)
+        company_info.potential_customer = score
+        company_info.reason = reason
         companies_db[name] = company_info
 
-        # grabbing company information
-        name = company_info['about_us']
-        about_us = company_info['about_us']
-        specialties = company_info['specialties']
-        industry = company_info['industry']
-        # Putting all info together
-        company_description = f"Company Name: {name}\nAbout Us: {about_us}\nSpecialties: {specialties}\nIndustry: {industry}"
-        # Performing company evaluation
-        score,reason = company_evaluation(requirements=requirements, company_description=company_description)
-        # Saving data into data structure
-        company_info['potential_customer'] = score
-        company_info['reason'] = reason
-    
-    # filtering not-suitable companies
-    selected_companies = {}
-    for name, info in companies_db.items():
-        # Check if the score is greater than the threshold and if so, add to the new dictionary
-        if info['potential_customer'] > threshold:
-            selected_companies[name] = info
+        if score > threshold:
+            selected_companies[name] = company_info
 
-    # Return the dictionary containing all the scraped company data
     return companies_db, selected_companies
 
 
 
 if __name__ == "__main__":
+
+    requirements = """ The ideal company should be a leader in the technology sector, specifically in artificial intelligence and machine learning. 
+    It should have a strong commitment to sustainability and ethical practices. 
+    The company should be medium-sized, with a global reach and a diverse team.
+    """
+
     driver = login()
-    hrefs = company_listing(driver=driver,n_pages=1)
+    hrefs = company_listing(driver=driver,n_pages=5)
     print(f"The amount of companies scrapped is: {len(hrefs)}")
-    company_db, selected_companies = company_orchestrator(driver=driver, companies=hrefs)
+    company_db, selected_companies = company_orchestrator(driver=driver, companies=hrefs, requirements=requirements, threshold=0.5)
     print(selected_companies)

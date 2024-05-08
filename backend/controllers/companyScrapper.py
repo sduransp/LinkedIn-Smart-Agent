@@ -83,8 +83,11 @@ class Company(Scraper):
     affiliated_companies = []
     employees = []
     headcount = None
+    potential_customer=None
+    reason=None
+    contact_people=None
 
-    def __init__(self, linkedin_url = None, name = None, about_us =None, website = None, headquarters = None, founded = None, industry = None, company_type = None, company_size = None, specialties = None, showcase_pages =[], affiliated_companies = [], driver = None, scrape = True, get_employees = True, close_on_complete = True):
+    def __init__(self, potential_customer=None, reason=None, contact_people=None, linkedin_url = None, name = None, about_us =None, website = None, headquarters = None, founded = None, industry = None, company_type = None, company_size = None, specialties = None, showcase_pages =[], affiliated_companies = [], driver = None, scrape = True, get_employees = True, close_on_complete = True):
         """ Initialize the Company object with various attributes and optionally start the scraping process. """
         self.linkedin_url = linkedin_url
         self.name = name
@@ -99,6 +102,9 @@ class Company(Scraper):
         self.showcase_pages = showcase_pages
         self.affiliated_companies = affiliated_companies
         self.image = None
+        self.potential_customer = potential_customer
+        self.reason = reason
+        self.contact_people = contact_people
 
         # Initialize or set up the web driver
         if driver is None:
@@ -232,8 +238,12 @@ class Company(Scraper):
         driver = self.driver
 
         driver.get(self.linkedin_url)
-
-        _ = WebDriverWait(driver, 10).until(EC.presence_of_all_elements_located((By.XPATH, '//span[@dir="ltr"]')))
+        wait = WebDriverWait(driver, 30)
+        try:
+            _  = wait.until(EC.presence_of_all_elements_located((By.XPATH, '//span[@dir="ltr"]')))
+        except:
+            return None
+        # _ = WebDriverWait(driver, 10).until(EC.presence_of_all_elements_located((By.XPATH, '//span[@dir="ltr"]')))
 
         navigation = driver.find_element(By.CLASS_NAME, "org-page-navigation__items ")
 
@@ -416,8 +426,8 @@ class Company(Scraper):
         _output['employees'] = self.employees
         _output['headcount'] = self.headcount
         _output['image']=self.image
-        _output['potential_customer']=None
-        _output['reason']=None
-        _output['contact_people']=None
+        _output['potential_customer']=self.potential_customer
+        _output['reason']=self.reason
+        _output['contact_people']=self.contact_people
         
         return json.dumps(_output).replace('\n', '')
