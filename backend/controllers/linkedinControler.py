@@ -128,46 +128,7 @@ def company_orchestrator(driver:webdriver.Chrome, companies:list, requirements:s
            1. Dictionary with all company names as keys and their scraped information as values.
            2. Dictionary with only suitable company names (based on the threshold) as keys and their scraped information as values.
     """
-    # # Initialize a dictionary to store company information
-    # companies_db = dict()
 
-    # # Loop over each company URL in the list
-    # for url in companies:
-    #     # Scrape the company information using the company_scrapping function
-    #     company_info = company_scrapping(url, driver)
-    #     # Extract the company name from the URL
-    #     name = url.split('/company/')[-1].rstrip('/')
-
-    #     # grabbing company information
-    #     name = company_info.name
-    #     about_us = company_info.about_us
-    #     specialties = company_info.specialties
-    #     industry = company_info.industry
-    #     # Putting all info together
-    #     company_description = f"Company Name: {name}\nAbout Us: {about_us}\nSpecialties: {specialties}\nIndustry: {industry}"
-
-    #     print(f"Company description: {company_description}")
-    #     # Performing company evaluation
-    #     score,reason = company_evaluation(requirements=requirements, company_description=company_description)
-    #     # Saving data into data structure
-    #     company_info.potential_customer = score
-    #     company_info.reason = reason
-
-    #     # Store the company information in the dictionary with the company name as the key
-    #     companies_db[name] = company_info
-    
-    # # filtering not-suitable companies
-    # selected_companies = {}
-    # for name, info in companies_db.items():
-    #     print(name)
-    #     print(info)
-
-    #     # Check if the score is greater than the threshold and if so, add to the new dictionary
-    #     if info.potential_customer > threshold:
-    #         selected_companies[name] = info
-
-    # # Return the dictionary containing all the scraped company data
-    # return companies_db, selected_companies
     companies_db = {}
     selected_companies = {}
 
@@ -183,6 +144,8 @@ def company_orchestrator(driver:webdriver.Chrome, companies:list, requirements:s
 
         if score > threshold:
             selected_companies[name] = company_info
+        
+        time.sleep(0.1)
 
     return companies_db, selected_companies
 
