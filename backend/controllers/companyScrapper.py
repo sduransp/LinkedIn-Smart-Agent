@@ -429,5 +429,6 @@ class Company(Scraper):
         _output['potential_customer']=self.potential_customer
         _output['reason']=self.reason
         _output['contact_people']=self.contact_people
+        _output['linkedin_url']=self.linkedin_url
         
         return json.dumps(_output).replace('\n', '')

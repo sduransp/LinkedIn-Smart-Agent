@@ -97,7 +97,7 @@ def company_listing(driver:webdriver.Chrome, n_pages:int = 100) -> list:
 
     return hrefs
 
-def company_scrapping(url_link: str, driver: webdriver.Chrome) -> Company:
+def company_scrapping(url_link: str, driver: webdriver.Chrome,employees:bool = False) -> Company:
     """
     Scrapes detailed information from a LinkedIn company page using a webdriver.
 
@@ -109,7 +109,7 @@ def company_scrapping(url_link: str, driver: webdriver.Chrome) -> Company:
     dict: A dictionary containing the company information.
     """
     # Initialize a Company object to scrape data
-    company_info = Company(linkedin_url=url_link, driver=driver, get_employees=False,close_on_complete=False)
+    company_info = Company(linkedin_url=url_link, driver=driver, get_employees=employees,close_on_complete=False)
     # Return the company information (here assuming it's a dict)
     return company_info
 
@@ -146,6 +146,19 @@ def company_orchestrator(driver:webdriver.Chrome, companies:list, requirements:s
             selected_companies[name] = company_info
         
         time.sleep(0.1)
+    
+    # get employees for filtered companies
+    for cmp in selected_companies:
+        print("About to obtain url linkedin for filtered company")
+        # getting linkedin url
+        company_url = selected_companies[cmp].linkedin_url
+        print(f"The company url is: {company_url}")
+        # obtaining employees
+        cp1 = company_scrapping(driver=driver, url_link=company_url, employees=True)
+        cp1_employees = cp1.employees
+        print(f"The company employees are {cp1_employees}")
+        # saving employee list into company object
+        selected_companies[cmp].employees = cp1_employees
 
     return companies_db, selected_companies
 

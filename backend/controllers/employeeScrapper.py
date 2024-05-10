@@ -11,7 +11,6 @@ sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '..')))
 from models.linkedin import Experience, Education, Scraper, Interest, Accomplishment, Contact
 
 
-
 class Person(Scraper):
 
     __TOP_CARD = "pv-top-card"
@@ -45,6 +44,7 @@ class Person(Scraper):
         self.also_viewed_urls = []
         self.contacts = contacts or []
         self.contact_of_interest = None
+        self.image = None
 
         if driver is None:
             try:
@@ -395,5 +395,9 @@ class Person(Scraper):
             int=self.interests,
             acc=self.accomplishments,
             conn=self.contacts,
-            of_interest=self.contact_of_interest
+            of_interest=self.contact_of_interest,
+            image=self.image
         )
+    
+if __name__ == "__main__"
+    pass
