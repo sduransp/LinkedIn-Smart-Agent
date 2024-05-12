@@ -7,6 +7,7 @@ from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
 import time
 from companyScrapper import Company
+from employeeScrapper import Person
 from gptControler import company_evaluation
 
 
@@ -172,7 +173,9 @@ if __name__ == "__main__":
     """
 
     driver = login()
-    hrefs = company_listing(driver=driver,n_pages=5)
-    print(f"The amount of companies scrapped is: {len(hrefs)}")
-    company_db, selected_companies = company_orchestrator(driver=driver, companies=hrefs, requirements=requirements, threshold=0.5)
-    print(selected_companies)
+    person_url = r"https://www.linkedin.com/in/ferminbazo/"
+    fermin = Person(linkedin_url=person_url, driver=driver)
+    # hrefs = company_listing(driver=driver,n_pages=5)
+    # print(f"The amount of companies scrapped is: {len(hrefs)}")
+    # company_db, selected_companies = company_orchestrator(driver=driver, companies=hrefs, requirements=requirements, threshold=0.5)
+    # print(selected_companies)

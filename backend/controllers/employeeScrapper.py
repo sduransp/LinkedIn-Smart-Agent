@@ -21,7 +21,7 @@ class Person(Scraper):
         linkedin_url=None,
         name=None,
         about=None,
-        experiences=None,
+        position=None,
         educations=None,
         interests=None,
         accomplishments=None,
@@ -37,7 +37,7 @@ class Person(Scraper):
         self.linkedin_url = linkedin_url
         self.name = name
         self.about = about or []
-        self.experiences = experiences or []
+        self.position = position or []
         self.educations = educations or []
         self.interests = interests or []
         self.accomplishments = accomplishments or []
@@ -110,183 +110,89 @@ class Person(Scraper):
         except:
             return False
 
-    def get_experiences(self):
-        url = os.path.join(self.linkedin_url, "details/experience")
-        self.driver.get(url)
-        self.focus()
-        main = self.wait_for_element_to_load(by=By.TAG_NAME, name="main")
-        self.scroll_to_half()
-        self.scroll_to_bottom()
-        main_list = self.wait_for_element_to_load(name="pvs-list", base=main)
-        for position in main_list.find_elements(By.XPATH,"li"):
-            position = position.find_element(By.CLASS_NAME,"pvs-entity")
-            company_logo_elem, position_details = position.find_elements(By.XPATH,"*")
-
-            # company elem
-            company_linkedin_url = company_logo_elem.find_element(By.XPATH,"*").get_attribute("href")
-
-            # position details
-            position_details_list = position_details.find_elements(By.XPATH,"*")
-            position_summary_details = position_details_list[0] if len(position_details_list) > 0 else None
-            position_summary_text = position_details_list[1] if len(position_details_list) > 1 else None
-            outer_positions = position_summary_details.find_element(By.XPATH,"*").find_elements(By.XPATH,"*")
-
-            if len(outer_positions) == 4:
-                position_title = outer_positions[0].find_element(By.TAG_NAME,"span").text
-                company = outer_positions[1].find_element(By.TAG_NAME,"span").text
-                work_times = outer_positions[2].find_element(By.TAG_NAME,"span").text
-                location = outer_positions[3].find_element(By.TAG_NAME,"span").text
-            elif len(outer_positions) == 3:
-                if "·" in outer_positions[2].text:
-                    position_title = outer_positions[0].find_element(By.TAG_NAME,"span").text
-                    company = outer_positions[1].find_element(By.TAG_NAME,"span").text
-                    work_times = outer_positions[2].find_element(By.TAG_NAME,"span").text
-                    location = ""
-                else:
-                    position_title = ""
-                    company = outer_positions[0].find_element(By.TAG_NAME,"span").text
-                    work_times = outer_positions[1].find_element(By.TAG_NAME,"span").text
-                    location = outer_positions[2].find_element(By.TAG_NAME,"span").text
-
-            times = work_times.split("·")[0].strip() if work_times else ""
-            duration = work_times.split("·")[1].strip() if len(work_times.split("·")) > 1 else None
-
-            from_date = " ".join(times.split(" ")[:2]) if times else ""
-            to_date = " ".join(times.split(" ")[3:]) if times else ""
-
-            if position_summary_text and len(position_summary_text.find_element(By.CLASS_NAME,"pvs-list").find_element(By.CLASS_NAME,"pvs-list").find_elements(By.XPATH,"li")) > 1:
-                descriptions = position_summary_text.find_element(By.CLASS_NAME,"pvs-list").find_element(By.CLASS_NAME,"pvs-list").find_elements(By.XPATH,"li")
-                for description in descriptions:
-                    res = description.find_element(By.TAG_NAME,"a").find_elements(By.XPATH,"*")
-                    position_title_elem = res[0] if len(res) > 0 else None
-                    work_times_elem = res[1] if len(res) > 1 else None
-                    location_elem = res[2] if len(res) > 2 else None
-
-
-                    location = location_elem.find_element(By.XPATH,"*").text if location_elem else None
-                    position_title = position_title_elem.find_element(By.XPATH,"*").find_element(By.TAG_NAME,"*").text if position_title_elem else ""
-                    work_times = work_times_elem.find_element(By.XPATH,"*").text if work_times_elem else ""
-                    times = work_times.split("·")[0].strip() if work_times else ""
-                    duration = work_times.split("·")[1].strip() if len(work_times.split("·")) > 1 else None
-                    from_date = " ".join(times.split(" ")[:2]) if times else ""
-                    to_date = " ".join(times.split(" ")[3:]) if times else ""
-
-                    experience = Experience(
-                        position_title=position_title,
-                        from_date=from_date,
-                        to_date=to_date,
-                        duration=duration,
-                        location=location,
-                        description=description,
-                        institution_name=company,
-                        linkedin_url=company_linkedin_url
-                    )
-                    self.add_experience(experience)
-            else:
-                description = position_summary_text.text if position_summary_text else ""
-
-                experience = Experience(
-                    position_title=position_title,
-                    from_date=from_date,
-                    to_date=to_date,
-                    duration=duration,
-                    location=location,
-                    description=description,
-                    institution_name=company,
-                    linkedin_url=company_linkedin_url
-                )
-                self.add_experience(experience)
-
     def get_educations(self):
         url = os.path.join(self.linkedin_url, "details/education")
         self.driver.get(url)
-        self.focus()
+        print("Waiting for main")
         main = self.wait_for_element_to_load(by=By.TAG_NAME, name="main")
+        print("Main is over")
         self.scroll_to_half()
         self.scroll_to_bottom()
-        main_list = self.wait_for_element_to_load(name="pvs-list", base=main)
-        for position in main_list.find_elements(By.CLASS_NAME,"pvs-entity"):
-            institution_logo_elem, position_details = position.find_elements(By.XPATH,"*")
+        print("Finding education items")
+        education_container = self.driver.find_element(By.XPATH, "//div[contains(@class, 'pvs-list__container')]//div[contains(@class, 'scaffold-finite-scroll__content')]")
+        education_items = education_container.find_elements(By.XPATH, ".//li[contains(@class, 'pvs-list__paged-list-item')]")
+        print(f"Education items: {education_items}")
+        for item in education_items:
+            # Extraer el nombre de la institución
+            try:
+                institution_name = item.find_element(By.CSS_SELECTOR, "div.display-flex a.optional-action-target-wrapper div.display-flex.align-items-center.hoverable-link-text").text.strip()
+                print(f"The institution name is: {institution_name}")
+            except NoSuchElementException:
+                institution_name = None
 
-            # company elem
-            institution_linkedin_url = institution_logo_elem.find_element(By.XPATH,"*").get_attribute("href")
+            # Extraer el grado obtenido
+            try:
+                degree = item.find_element(By.CSS_SELECTOR, "span.t-14.t-normal").text.strip()
+                print(f"The degree is {degree}")
+            except NoSuchElementException:
+                degree = None
 
-            # position details
-            position_details_list = position_details.find_elements(By.XPATH,"*")
-            position_summary_details = position_details_list[0] if len(position_details_list) > 0 else None
-            position_summary_text = position_details_list[1] if len(position_details_list) > 1 else None
-            outer_positions = position_summary_details.find_element(By.XPATH,"*").find_elements(By.XPATH,"*")
-
-            institution_name = outer_positions[0].find_element(By.TAG_NAME,"span").text
-            degree = outer_positions[1].find_element(By.TAG_NAME,"span").text
-
-            if len(outer_positions) > 2:
-                times = outer_positions[2].find_element(By.TAG_NAME,"span").text
-
-                from_date = " ".join(times.split(" ")[:2])
-                to_date = " ".join(times.split(" ")[3:])
-            else:
-                from_date = None
-                to_date = None
-
-
-
-            description = position_summary_text.text if position_summary_text else ""
-
-            education = Education(
-                from_date=from_date,
-                to_date=to_date,
-                description=description,
+            # Crear el objeto Education y añadirlo a la lista
+            self.educations.append(Education(
+                from_date=None,
+                to_date=None,
+                description=None,
                 degree=degree,
                 institution_name=institution_name,
-                linkedin_url=institution_linkedin_url
-            )
-            self.add_education(education)
+                linkedin_url=None,
+            ))
+        
+        print(f"The education is: {self.educations}")
+
 
     def get_name_and_location(self):
-        top_panels = self.driver.find_elements(By.CLASS_NAME,"pv-text-details__left-panel")
-        self.name = top_panels[0].find_elements(By.XPATH,"*")[0].text
-        self.location = top_panels[1].find_element(By.TAG_NAME,"span").text
-
-
-    def get_about(self):
+    # Intentar encontrar el elemento <h1> que contiene el nombre completo.
         try:
-            about = self.driver.find_element(By.ID,"about").find_element(By.XPATH,"..").find_element(By.CLASS_NAME,"display-flex").text
-        except NoSuchElementException :
-            about=None
-        self.about = about
+            name_element = self.driver.find_element(By.XPATH, "//h1[contains(@class, 'text-heading-xlarge')]")
+            self.name = name_element.text.strip()
+        except Exception as e:
+            print(f"Error finding name: {e}")
+            self.name = None
+
+        # Intentar encontrar el span que contiene la ubicación.
+        try:
+            location_element = self.driver.find_element(By.XPATH, "//div[contains(@class, 'lkGISlehKsxOwfsxIBpWUCjGoPJjerBOeQXnwk')]/span[contains(@class, 't-black--light') and contains(@class, 'break-words')]")
+            self.location = location_element.text.strip()
+        except Exception as e:
+            print(f"Error finding location: {e}")
+            self.location = None
+        
+        try:
+            position_element = self.driver.find_element(By.XPATH, "//div[@data-generated-suggestion-target][contains(@class, 'text-body-medium')]")
+            self.position = position_element.text.strip()
+        except Exception as e:
+            print(f"Error finding position: {e}")
+            self.position = None
+
+        print(f"Name is: {self.name}")
+        print(f"Location is: {self.location}") 
+        print(f"Position is: {self.position}") 
+    
 
     def scrape_logged_in(self, close_on_complete=True):
         driver = self.driver
-        duration = None
-
-        root = WebDriverWait(driver, self.__WAIT_FOR_ELEMENT_TIMEOUT).until(
-            EC.presence_of_element_located(
-                (
-                    By.CLASS_NAME,
-                    self.__TOP_CARD,
-                )
-            )
-        )
-        self.focus()
-        self.wait(5)
+        
+        self.wait(1)
 
         # get name and location
         self.get_name_and_location()
 
-        self.open_to_work = self.is_open_to_work()
-
-        # get about
-        self.get_about()
         driver.execute_script(
             "window.scrollTo(0, Math.ceil(document.body.scrollHeight/2));"
         )
         driver.execute_script(
             "window.scrollTo(0, Math.ceil(document.body.scrollHeight/1.5));"
         )
-
-        # get experience
-        self.get_experiences()
 
         # get education
         self.get_educations()
@@ -390,7 +296,7 @@ class Person(Scraper):
         return "<Person {name}\n\nAbout\n{about}\n\nExperience\n{exp}\n\nEducation\n{edu}\n\nInterest\n{int}\n\nAccomplishments\n{acc}\n\nContacts\n{conn}>".format(
             name=self.name,
             about=self.about,
-            exp=self.experiences,
+            pos=self.position,
             edu=self.educations,
             int=self.interests,
             acc=self.accomplishments,
@@ -399,5 +305,5 @@ class Person(Scraper):
             image=self.image
         )
     
-if __name__ == "__main__"
+if __name__ == "__main__":
     pass
