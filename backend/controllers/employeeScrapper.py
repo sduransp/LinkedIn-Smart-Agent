@@ -12,6 +12,8 @@ from models.linkedin import Experience, Education, Scraper, Interest, Accomplish
 
 
 class Person(Scraper):
+    """Represents a LinkedIn profile scraper with extended attributes and methods
+    to extract detailed personal information including job experiences and education."""
 
     __TOP_CARD = "pv-top-card"
     __WAIT_FOR_ELEMENT_TIMEOUT = 5
@@ -111,31 +113,27 @@ class Person(Scraper):
             return False
 
     def get_educations(self):
+        """
+            Extracts education details from a LinkedIn profile and stores them in a list.
+            This method navigates to the education section of a LinkedIn profile,
+            waits for elements to load, and scrapes the education details such as
+            institution name and degree. Each entry is then stored as an Education object.
+        """
         url = os.path.join(self.linkedin_url, "details/education")
         self.driver.get(url)
-        print("Waiting for main")
         main = self.wait_for_element_to_load(by=By.TAG_NAME, name="main")
-        print("Main is over")
         self.scroll_to_half()
         self.scroll_to_bottom()
-        print("Finding education items")
-        education_container = self.driver.find_element(By.XPATH, "//div[contains(@class, 'pvs-list__container')]//div[contains(@class, 'scaffold-finite-scroll__content')]")
+        # Locating the container that holds the education information.
+        education_container = WebDriverWait(self.driver, 20).until(
+                EC.visibility_of_element_located((By.XPATH, "//div[contains(@class, 'pvs-list__container')]//div[contains(@class, 'scaffold-finite-scroll__content')]"))
+            )
+        # Extracting individual education entries.
         education_items = education_container.find_elements(By.XPATH, ".//li[contains(@class, 'pvs-list__paged-list-item')]")
-        print(f"Education items: {education_items}")
         for item in education_items:
-            # Extraer el nombre de la institución
-            try:
-                institution_name = item.find_element(By.CSS_SELECTOR, "div.display-flex a.optional-action-target-wrapper div.display-flex.align-items-center.hoverable-link-text").text.strip()
-                print(f"The institution name is: {institution_name}")
-            except NoSuchElementException:
-                institution_name = None
-
-            # Extraer el grado obtenido
-            try:
-                degree = item.find_element(By.CSS_SELECTOR, "span.t-14.t-normal").text.strip()
-                print(f"The degree is {degree}")
-            except NoSuchElementException:
-                degree = None
+            text = item.text.split("\n")
+            institution_name = text[0]
+            degree = text[2] if len(text) > 2 else "No degree information"
 
             # Crear el objeto Education y añadirlo a la lista
             self.educations.append(Education(
@@ -146,12 +144,19 @@ class Person(Scraper):
                 institution_name=institution_name,
                 linkedin_url=None,
             ))
-        
-        print(f"The education is: {self.educations}")
-
 
     def get_name_and_location(self):
-    # Intentar encontrar el elemento <h1> que contiene el nombre completo.
+        """
+            Extracts the name, location, and current position from a LinkedIn profile.
+
+            This method navigates to specific elements on a LinkedIn profile page to extract:
+            - The user's name,
+            - Their location,
+            - Their current position (job title).
+            
+            If any element is not found, it captures the exception and sets the corresponding attribute to None.
+        """
+        # Extract the full name from the profile.
         try:
             name_element = self.driver.find_element(By.XPATH, "//h1[contains(@class, 'text-heading-xlarge')]")
             self.name = name_element.text.strip()
@@ -159,116 +164,73 @@ class Person(Scraper):
             print(f"Error finding name: {e}")
             self.name = None
 
-        # Intentar encontrar el span que contiene la ubicación.
+        # Extract the location from the profile.
         try:
             location_element = self.driver.find_element(By.XPATH, "//div[contains(@class, 'lkGISlehKsxOwfsxIBpWUCjGoPJjerBOeQXnwk')]/span[contains(@class, 't-black--light') and contains(@class, 'break-words')]")
             self.location = location_element.text.strip()
         except Exception as e:
             print(f"Error finding location: {e}")
             self.location = None
-        
+
+        # Extract the current position (job title) from the profile.
         try:
             position_element = self.driver.find_element(By.XPATH, "//div[@data-generated-suggestion-target][contains(@class, 'text-body-medium')]")
             self.position = position_element.text.strip()
         except Exception as e:
             print(f"Error finding position: {e}")
             self.position = None
-
-        print(f"Name is: {self.name}")
-        print(f"Location is: {self.location}") 
-        print(f"Position is: {self.position}") 
     
+    def get_profile_image(self):
+        """
+        Extracts the profile image URL from a LinkedIn profile.
+
+        This method navigates to specific elements on a LinkedIn profile page to extract:
+        - The user's profile image URL.
+        
+        If the image element is not found, it captures the exception and sets the image URL attribute to None.
+        """
+        # Attempt to extract the profile image URL from the profile.
+        try:
+            image_element = self.driver.find_element(By.XPATH, "//div[contains(@class, 'pv-top-card__non-self-photo-wrapper')]//img[contains(@class, 'pv-top-card-profile-picture__image--show')]")
+            self.image = image_element.get_attribute('src').strip()
+            print(self.image)
+        except Exception as e:
+            print(f"Error finding profile image: {e}")
+            self.image = None
 
     def scrape_logged_in(self, close_on_complete=True):
-        driver = self.driver
-        
+        """
+            Performs a sequence of actions to scrape data from a LinkedIn profile.
+
+            This method sequentially executes data scraping for the user's name, location,
+            and educational background. It includes scrolling actions to ensure all relevant
+            data is loaded on the page. The browser is optionally closed upon completion.
+
+            Args:
+                close_on_complete (bool): If True, the web driver will close after scraping.
+        """
+        # Ensure the page is fully loaded.
         self.wait(1)
 
-        # get name and location
+        # Scrape name and location information from the profile.
         self.get_name_and_location()
 
-        driver.execute_script(
-            "window.scrollTo(0, Math.ceil(document.body.scrollHeight/2));"
-        )
-        driver.execute_script(
-            "window.scrollTo(0, Math.ceil(document.body.scrollHeight/1.5));"
-        )
+        # Scrolling to ensure all parts of the page are loaded.
+        self.driver.execute_script("window.scrollTo(0, Math.ceil(document.body.scrollHeight/2));")
+        self.driver.execute_script("window.scrollTo(0, Math.ceil(document.body.scrollHeight/1.5));")
 
-        # get education
+        # Scrape the education section of the LinkedIn profile.
         self.get_educations()
 
-        driver.get(self.linkedin_url)
+        # Reload the LinkedIn profile page to reset any state changed by scrolling.
+        self.driver.get(self.linkedin_url)
 
-        # get interest
-        try:
+        # Grab image
+        self.get_profile_image()
 
-            _ = WebDriverWait(driver, self.__WAIT_FOR_ELEMENT_TIMEOUT).until(
-                EC.presence_of_element_located(
-                    (
-                        By.XPATH,
-                        "//*[@class='pv-profile-section pv-interests-section artdeco-container-card artdeco-card ember-view']",
-                    )
-                )
-            )
-            interestContainer = driver.find_element(By.XPATH,
-                "//*[@class='pv-profile-section pv-interests-section artdeco-container-card artdeco-card ember-view']"
-            )
-            for interestElement in interestContainer.find_elements(By.XPATH, 
-                "//*[@class='pv-interest-entity pv-profile-section__card-item ember-view']"
-            ):
-                interest = Interest(
-                    interestElement.find_element(By.TAG_NAME, "h3").text.strip()
-                )
-                self.add_interest(interest)
-        except:
-            pass
-
-        # get accomplishment
-        try:
-            _ = WebDriverWait(driver, self.__WAIT_FOR_ELEMENT_TIMEOUT).until(
-                EC.presence_of_element_located(
-                    (
-                        By.XPATH,
-                        "//*[@class='pv-profile-section pv-accomplishments-section artdeco-container-card artdeco-card ember-view']",
-                    )
-                )
-            )
-            acc = driver.find_element(By.XPATH,
-                "//*[@class='pv-profile-section pv-accomplishments-section artdeco-container-card artdeco-card ember-view']"
-            )
-            for block in acc.find_elements(By.XPATH, 
-                "//div[@class='pv-accomplishments-block__content break-words']"
-            ):
-                category = block.find_element(By.TAG_NAME, "h3")
-                for title in block.find_element(By.TAG_NAME, 
-                    "ul"
-                ).find_elements(By.TAG_NAME, "li"):
-                    accomplishment = Accomplishment(category.text, title.text)
-                    self.add_accomplishment(accomplishment)
-        except:
-            pass
-
-        # get connections
-        try:
-            driver.get("https://www.linkedin.com/mynetwork/invite-connect/connections/")
-            _ = WebDriverWait(driver, self.__WAIT_FOR_ELEMENT_TIMEOUT).until(
-                EC.presence_of_element_located((By.CLASS_NAME, "mn-connections"))
-            )
-            connections = driver.find_element(By.CLASS_NAME, "mn-connections")
-            if connections is not None:
-                for conn in connections.find_elements(By.CLASS_NAME, "mn-connection-card"):
-                    anchor = conn.find_element(By.CLASS_NAME, "mn-connection-card__link")
-                    url = anchor.get_attribute("href")
-                    name = conn.find_element(By.CLASS_NAME, "mn-connection-card__details").find_element(By.CLASS_NAME, "mn-connection-card__name").text.strip()
-                    occupation = conn.find_element(By.CLASS_NAME, "mn-connection-card__details").find_element(By.CLASS_NAME, "mn-connection-card__occupation").text.strip()
-
-                    contact = Contact(name=name, occupation=occupation, url=url)
-                    self.add_contact(contact)
-        except:
-            connections = None
-
+        # Close the driver if specified to do so.
         if close_on_complete:
-            driver.quit()
+            self.driver.quit()
 
     @property
     def company(self):
@@ -293,7 +255,7 @@ class Person(Scraper):
             return None
 
     def __repr__(self):
-        return "<Person {name}\n\nAbout\n{about}\n\nExperience\n{exp}\n\nEducation\n{edu}\n\nInterest\n{int}\n\nAccomplishments\n{acc}\n\nContacts\n{conn}>".format(
+        return "<Person {name}\n\nExperience\n{pos}\n\nEducation\n{edu}\n\Image\n{image}>".format(
             name=self.name,
             about=self.about,
             pos=self.position,

@@ -173,8 +173,9 @@ if __name__ == "__main__":
     """
 
     driver = login()
-    person_url = r"https://www.linkedin.com/in/ferminbazo/"
+    person_url = r"https://www.linkedin.com/in/in%C3%A9s-mena-luc%C3%ADa-394298b3/"
     fermin = Person(linkedin_url=person_url, driver=driver)
+    print(fermin)
     # hrefs = company_listing(driver=driver,n_pages=5)
     # print(f"The amount of companies scrapped is: {len(hrefs)}")
     # company_db, selected_companies = company_orchestrator(driver=driver, companies=hrefs, requirements=requirements, threshold=0.5)
