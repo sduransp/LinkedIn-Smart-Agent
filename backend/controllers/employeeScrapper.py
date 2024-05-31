@@ -47,6 +47,7 @@ class Person(Scraper):
         self.contacts = contacts or []
         self.contact_of_interest = None
         self.image = None
+        self.reason= None
 
         if driver is None:
             try:
@@ -264,7 +265,8 @@ class Person(Scraper):
             acc=self.accomplishments,
             conn=self.contacts,
             of_interest=self.contact_of_interest,
-            image=self.image
+            image=self.image,
+            reason = self.reason
         )
     
 if __name__ == "__main__":

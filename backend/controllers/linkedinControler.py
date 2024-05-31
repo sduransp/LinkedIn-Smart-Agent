@@ -8,7 +8,7 @@ from selenium.webdriver.support import expected_conditions as EC
 import time
 from companyScrapper import Company
 from employeeScrapper import Person
-from gptControler import company_evaluation
+from gptControler import company_evaluation, employee_evaluation
 
 
 # Defining variables
@@ -163,6 +163,51 @@ def company_orchestrator(driver:webdriver.Chrome, companies:list, requirements:s
 
     return companies_db, selected_companies
 
+def employee_orchestrator(driver: webdriver.Chrome, selected_companies: dict, threshold: float = 0.7) -> dict:
+    """
+        Orchestrates the process of evaluating employees from selected companies.
+
+        Parameters:
+        driver (webdriver.Chrome): The Selenium WebDriver instance.
+        selected_companies (dict): A dictionary of companies with their respective LinkedIn employee URLs.
+        threshold (float): The score threshold for selecting employees.
+
+        Returns:
+        dict: A dictionary containing the databases of all employees and the selected employees.
+    """
+    employees_db = {}
+    selected_employees = {}
+
+    # Looping over all companies
+    for cmp in selected_companies:
+        employees_db[cmp] = {}
+        selected_employees[cmp] = []
+        # Retrieving list of all employees in the company
+        all_employees = selected_companies[cmp].employees
+        # Getting information for each employee
+        for employee_url in all_employees:
+            # Scraping individual employee information
+            empl_info = Person(linkedin_url=employee_url, driver=driver, close_on_complete=False)
+            # Adding info to the data structure
+            employee_name = empl_info.name
+            employee_position = empl_info.position
+            employee_education = empl_info.educations
+            employees_db[cmp][employee_name] = empl_info
+
+            # Evaluating individual employee
+            score, response = employee_evaluation(employee_name, employee_position, employee_education)
+            employees_db[cmp][employee_name].contact_of_interest = score
+            employees_db[cmp][employee_name].reason = response
+
+            # Filter selected employees
+            if score > threshold:
+                selected_employees[cmp].append(empl_info)
+
+    return employees_db, selected_employees
+
+
+
+
 
 
 if __name__ == "__main__":
@@ -175,7 +220,11 @@ if __name__ == "__main__":
     driver = login()
     person_url = r"https://www.linkedin.com/in/in%C3%A9s-mena-luc%C3%ADa-394298b3/"
     fermin = Person(linkedin_url=person_url, driver=driver)
-    print(fermin)
+    print(f"The name of the person is: {type(fermin.name)}")
+    print(f"The about of the person is: {type(fermin.about)}")
+    print(f"The position of the person is: {type(fermin.position)}")
+    print(f"The education of the person is: {type(fermin.educations)}")
+
     # hrefs = company_listing(driver=driver,n_pages=5)
     # print(f"The amount of companies scrapped is: {len(hrefs)}")
     # company_db, selected_companies = company_orchestrator(driver=driver, companies=hrefs, requirements=requirements, threshold=0.5)

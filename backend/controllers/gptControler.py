@@ -2,6 +2,12 @@
 import os
 from openai import AzureOpenAI
 import re
+import yaml
+
+def load_requirements(config_path='config/requirements.yaml'):
+        with open(config_path, 'r') as file:
+            config = yaml.safe_load(file)
+        return config['employee_requirements']
 
 def extract_score(response):
     """
@@ -74,6 +80,69 @@ def company_evaluation(requirements:str, company_description:str)-> float:
 
     return(score, response)
 
+def employee_evaluation(employee_name: str, employee_position: str, employee_education: list) -> float:
+    """
+        Evaluates how closely an employee's profile matches a given target profile using GPT-4 Turbo model provided by Azure.
+
+        Parameters:
+        requirements (str): The target profile description of the desired employee.
+        employee_name (str): The name of the employee.
+        employee_position (str): The position/job title of the employee.
+        employee_education (list): The educational background of the employee.
+
+        Returns:
+        float: A compatibility score between 0.0 and 1.0 indicating the match level.
+    """
+    # Load the requirements from the YAML configuration file
+    client = AzureOpenAI(
+        api_version = os.getenv("OPENAI_API_VERSION"),
+        azure_endpoint=os.getenv("OPENAI_ENDPOINT"),
+        api_key=os.getenv("OPENAI_KEY")
+    )
+    # Initialize the Azure OpenAI client
+    employee_education_str = ", ".join(
+        [f"{edu.institution_name}: {edu.degree}" for edu in employee_education]
+    )
+    # Format the employee's education details
+    requirements = load_requirements()
+
+    # Prepare the message for the GPT-4 model
+    message_text = [{
+        "role": "system",
+        "content": (f"""
+                    Given the desired employee profile description and a specific employee's details, determine how well the employee matches the desired profile. 
+                    The input consists of two parts: the target profile description, which outlines the characteristics and qualities of the ideal employee, and the actual employee's details.
+
+                    Input:
+
+                    Target Profile Description: {requirements}
+                    Actual Employee Details: 
+                    - Name: {employee_name}
+                    - Position: {employee_position}
+                    - Education: {employee_education_str}
+
+                    Task:
+                    Evaluate how closely the actual employee details match the target profile description. Return a compatibility score ranging from 0 to 1, where 0 indicates no suitability and 1 indicates total suitability.
+                    In addition, return a brief explanation of this decision.
+                    Consider factors like job relevance, educational background, skills, and any specified attributes in your assessment.
+
+                    Output:
+                    A single floating-point number representing the compatibility score.
+                   """
+        )
+    }]
+    # Get the response from the GPT-4 model
+    chat_completion = client.chat.completions.create(
+        model="gpt4-turbo",
+        messages=message_text,
+        temperature=0.0
+    )
+
+    response = chat_completion.choices[0].message["content"]
+    score = extract_score(response)
+
+    return score, response
+    
 
 if __name__ == "__main__":
 
