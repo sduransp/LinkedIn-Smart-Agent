@@ -48,6 +48,7 @@ class Person(Scraper):
         self.contact_of_interest = None
         self.image = None
         self.reason= None
+        self.location = None
 
         if driver is None:
             try:
@@ -159,15 +160,18 @@ class Person(Scraper):
         """
         # Extract the full name from the profile.
         try:
-            name_element = self.driver.find_element(By.XPATH, "//h1[contains(@class, 'text-heading-xlarge')]")
+            name_element = WebDriverWait(self.driver, 10).until(
+                EC.presence_of_element_located((By.XPATH, "//h1[contains(@class, 'text-heading-xlarge')]"))
+            )
             self.name = name_element.text.strip()
         except Exception as e:
             print(f"Error finding name: {e}")
             self.name = None
 
-        # Extract the location from the profile.
         try:
-            location_element = self.driver.find_element(By.XPATH, "//div[contains(@class, 'lkGISlehKsxOwfsxIBpWUCjGoPJjerBOeQXnwk')]/span[contains(@class, 't-black--light') and contains(@class, 'break-words')]")
+            location_element = WebDriverWait(self.driver, 10).until(
+                EC.presence_of_element_located((By.XPATH, "//div[contains(@class, 'JzrpPzFPVfMTKltJaeuHYAbwdXZQyCJmdw') and contains(@class, 'mt2')]//span[contains(@class, 'text-body-small') and contains(@class, 'break-words')]"))
+            )
             self.location = location_element.text.strip()
         except Exception as e:
             print(f"Error finding location: {e}")
@@ -175,7 +179,9 @@ class Person(Scraper):
 
         # Extract the current position (job title) from the profile.
         try:
-            position_element = self.driver.find_element(By.XPATH, "//div[@data-generated-suggestion-target][contains(@class, 'text-body-medium')]")
+            position_element = WebDriverWait(self.driver, 10).until(
+                EC.presence_of_element_located((By.XPATH, "//div[@data-generated-suggestion-target][contains(@class, 'text-body-medium')]"))
+            )
             self.position = position_element.text.strip()
         except Exception as e:
             print(f"Error finding position: {e}")
@@ -266,7 +272,8 @@ class Person(Scraper):
             conn=self.contacts,
             of_interest=self.contact_of_interest,
             image=self.image,
-            reason = self.reason
+            reason = self.reason,
+            location=self.location
         )
     
 if __name__ == "__main__":

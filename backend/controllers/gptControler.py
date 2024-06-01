@@ -7,6 +7,7 @@ import yaml
 def load_requirements(config_path='config/requirements.yaml'):
         with open(config_path, 'r') as file:
             config = yaml.safe_load(file)
+        print(f"The requirements for identifying a potential contact are {config['employee_requirements']}")
         return config['employee_requirements']
 
 def extract_score(response):

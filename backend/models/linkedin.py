@@ -11,6 +11,7 @@ from selenium.webdriver.common.by import By
 from selenium.webdriver.support.wait import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
 
+from pydantic import BaseModel
 
 # Adding functionality
 @dataclass
@@ -163,3 +164,9 @@ class Scraper:
         for elem in args:
             if elem:
                 return elem[0]
+
+class ReponseStatus(BaseModel):
+    status: str = "ok"
+
+class TextInput(BaseModel):
+    text: str

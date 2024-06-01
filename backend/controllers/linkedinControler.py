@@ -6,6 +6,9 @@ from selenium.webdriver.common.by import By
 from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
 import time
+# from controllers.companyScrapper import Company
+# from controllers.employeeScrapper import Person
+# from controllers.gptControler import company_evaluation, employee_evaluation
 from companyScrapper import Company
 from employeeScrapper import Person
 from gptControler import company_evaluation, employee_evaluation
@@ -95,7 +98,6 @@ def company_listing(driver:webdriver.Chrome, n_pages:int = 100) -> list:
             driver.save_screenshot('error_screenshot.png')
             print(f"Ocurrió un error: {str(e)}")
             break
-
     return hrefs
 
 def company_scrapping(url_link: str, driver: webdriver.Chrome,employees:bool = False) -> Company:
@@ -137,12 +139,16 @@ def company_orchestrator(driver:webdriver.Chrome, companies:list, requirements:s
         company_info = company_scrapping(url, driver)
         name = company_info.name
         company_description = f"Company Name: {name}\nAbout Us: {company_info.about_us}\nSpecialties: {company_info.specialties}\nIndustry: {company_info.industry}"
-
+        print(f"The company being evaluated is: {company_description}")
         score, reason = company_evaluation(requirements=requirements, company_description=company_description)
         company_info.potential_customer = score
         company_info.reason = reason
         companies_db[name] = company_info
-
+        print(f"The compatibility score is: {score}")
+        print(f"The reason for that score is: {reason}")
+        # Ensuring that the score has been obtained
+        if not isinstance(score, float):
+            score = 0.0
         if score > threshold:
             selected_companies[name] = company_info
         
@@ -150,14 +156,11 @@ def company_orchestrator(driver:webdriver.Chrome, companies:list, requirements:s
     
     # get employees for filtered companies
     for cmp in selected_companies:
-        print("About to obtain url linkedin for filtered company")
         # getting linkedin url
         company_url = selected_companies[cmp].linkedin_url
-        print(f"The company url is: {company_url}")
         # obtaining employees
         cp1 = company_scrapping(driver=driver, url_link=company_url, employees=True)
         cp1_employees = cp1.employees
-        print(f"The company employees are {cp1_employees}")
         # saving employee list into company object
         selected_companies[cmp].employees = cp1_employees
 
@@ -193,11 +196,13 @@ def employee_orchestrator(driver: webdriver.Chrome, selected_companies: dict, th
             employee_position = empl_info.position
             employee_education = empl_info.educations
             employees_db[cmp][employee_name] = empl_info
-
+            print(f"Evaluating the employee {employee_name} that works as {employee_position} and has a background: {employee_education}")
             # Evaluating individual employee
             score, response = employee_evaluation(employee_name, employee_position, employee_education)
             employees_db[cmp][employee_name].contact_of_interest = score
             employees_db[cmp][employee_name].reason = response
+            print(f"The compatibility score of the employee is {score}")
+            print(f"The reason for that score is: {response}")
 
             # Filter selected employees
             if score > threshold:
@@ -218,12 +223,14 @@ if __name__ == "__main__":
     """
 
     driver = login()
-    person_url = r"https://www.linkedin.com/in/in%C3%A9s-mena-luc%C3%ADa-394298b3/"
+    person_url = r"https://www.linkedin.com/in/alvaro-de-balb%C3%ADn-bueno-5635bb2b7/"
     fermin = Person(linkedin_url=person_url, driver=driver)
-    print(f"The name of the person is: {type(fermin.name)}")
-    print(f"The about of the person is: {type(fermin.about)}")
-    print(f"The position of the person is: {type(fermin.position)}")
-    print(f"The education of the person is: {type(fermin.educations)}")
+    print(f"The name of the person is: {fermin.name}")
+    print(f"The about of the person is: {fermin.about}")
+    print(f"The position of the person is: {fermin.position}")
+    print(f"The education of the person is: {fermin.educations}")
+    print(f"The location of the person is: {fermin.location}")
+
 
     # hrefs = company_listing(driver=driver,n_pages=5)
     # print(f"The amount of companies scrapped is: {len(hrefs)}")
