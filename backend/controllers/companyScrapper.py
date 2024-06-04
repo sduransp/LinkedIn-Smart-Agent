@@ -153,6 +153,7 @@ class Company(Scraper):
             # print(e)
             return None
 
+    
     def get_employees(self, wait_time=10):
         """
             Retrieve and return a list of employee profile URLs from a company's LinkedIn page.
@@ -167,23 +168,18 @@ class Company(Scraper):
             Returns:
                 list: A list of URLs to employee profiles.
         """
-
         employee_urls = []  # List to hold employee profile URLs
         driver = self.driver  # Selenium WebDriver instance
 
         # Scroll to the top of the page to ensure visibility of all elements
         driver.execute_script("window.scrollTo(0, 0);")
-        WebDriverWait(driver, 2).until(
-            EC.presence_of_element_located((By.TAG_NAME, "body"))
-        )
+        WebDriverWait(driver, 2).until(EC.presence_of_element_located((By.TAG_NAME, "body")))
 
         # Attempt to find the link to the employees listing page
+        employee_links = driver.find_elements(By.CSS_SELECTOR, "a.ember-view.org-top-card-summary-info-list__info-item")
         href = None
-        employee_links = driver.find_elements(
-            By.CSS_SELECTOR, "a.ember-view.org-top-card-summary-info-list__info-item"
-        )
         for link in employee_links:
-            if 'employees' in link.find_element(By.TAG_NAME, "span").text:
+            if 'employees' in link.find_element(By.TAG_NAME, "span").text.lower():
                 href = link.get_attribute('href')
                 break
 
@@ -191,34 +187,24 @@ class Company(Scraper):
             driver.get(href)
             wait = WebDriverWait(driver, wait_time)
 
-            # Loop to navigate through all pages and collect employee profile links
             while True:
-                wait.until(
-                EC.presence_of_all_elements_located((By.CSS_SELECTOR, "ul.reusable-search__entity-result-list"))
-                )
+                # Wait for the presence of employee list elements
+                wait.until(EC.presence_of_all_elements_located((By.CSS_SELECTOR, "ul.reusable-search__entity-result-list")))
+
                 # Extract all profile links that contain '/in/' in the current page
-                profiles = driver.find_elements(
-                    By.CSS_SELECTOR, "li.reusable-search__result-container a.app-aware-link[data-test-app-aware-link]:not([aria-hidden='true'])"
-                )
-                
-                print("Total profiles found:", len(profiles))
-
-
-                for profile in profiles:
-
-                    # Obtener URL del perfil
-                    profile_url = profile.get_attribute('href')
-                    profile_link = driver.find_element(By.CSS_SELECTOR, "a.app-aware-link.scale-down[aria-hidden='true']")
+                profile_elements = driver.find_elements(By.CSS_SELECTOR, "li.reusable-search__result-container")
+                for profile in profile_elements:
+                    profile_link = profile.find_element(By.CSS_SELECTOR, "a.app-aware-link[data-test-app-aware-link]:not([aria-hidden='true'])")
                     profile_url = profile_link.get_attribute('href')
-
-                    # Agregar el URL al listado si cumple la condición
-                    if "/in/" in str(profile_url):
+                    
+                    if "/in/" in profile_url and profile_url not in employee_urls:
                         employee_urls.append(profile_url)
 
-                print(employee_urls)
+                # Scroll down to the bottom of the page to load more results
                 driver.execute_script("window.scrollTo(0, document.body.scrollHeight);")
                 time.sleep(1)
-                # Navigate to the next page if possible
+
+                # Check if there is a 'Next' button to navigate to the next page
                 try:
                     next_button = driver.find_element(By.CSS_SELECTOR, "button.artdeco-pagination__button--next")
                     if "disabled" in next_button.get_attribute("class"):
@@ -275,7 +261,6 @@ class Company(Scraper):
        #section ID is no longer needed, we are using class name now.
         #grid = driver.find_elements_by_tag_name("section")[section_id]
         grid = driver.find_element(By.CLASS_NAME, "artdeco-card.org-page-details-module__card-spacing.artdeco-card.org-about-module__margin-bottom")
-        print(grid)
         descWrapper = grid.find_elements(By.TAG_NAME, "p")
         if len(descWrapper) > 0:
             self.about_us = descWrapper[0].text.strip()

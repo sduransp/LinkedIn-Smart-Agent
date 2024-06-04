@@ -6,7 +6,7 @@ from selenium.webdriver.support import expected_conditions as EC
 from selenium.common.exceptions import NoSuchElementException
 import sys
 import os
-
+from urllib.parse import urlparse
 sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '..')))
 from models.linkedin import Experience, Education, Scraper, Interest, Accomplishment, Contact
 
@@ -122,7 +122,12 @@ class Person(Scraper):
             institution name and degree. Each entry is then stored as an Education object.
         """
         url = os.path.join(self.linkedin_url, "details/education")
+
+        parsed_url = urlparse(self.linkedin_url)
+        base_url = f"https://{parsed_url.netloc}{parsed_url.path}"
+        url = os.path.join(base_url, "details/education")
         self.driver.get(url)
+
         main = self.wait_for_element_to_load(by=By.TAG_NAME, name="main")
         self.scroll_to_half()
         self.scroll_to_bottom()

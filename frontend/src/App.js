@@ -6,18 +6,14 @@ import BrandIcons from './components/BrandIcons'
 import 'bootstrap/dist/css/bootstrap.min.css';
 import Trending from './components/Trending';
 import Products from './components/Products';
-
-
-
-
+import Login, { Render } from 'react-login-page';
+import Logo from 'react-login-page/logo';
 
 import {
   BrowserRouter as Router,
   Routes,
   Route,
 } from "react-router-dom";
-
-
 
 const App = () => {
     return (

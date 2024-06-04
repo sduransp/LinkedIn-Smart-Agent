@@ -139,7 +139,7 @@ def employee_evaluation(employee_name: str, employee_position: str, employee_edu
         temperature=0.0
     )
 
-    response = chat_completion.choices[0].message["content"]
+    response = chat_completion.choices[0].message.content
     score = extract_score(response)
 
     return score, response
