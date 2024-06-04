@@ -6,12 +6,12 @@ from selenium.webdriver.common.by import By
 from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
 import time
-# from controllers.companyScrapper import Company
-# from controllers.employeeScrapper import Person
-# from controllers.gptControler import company_evaluation, employee_evaluation
-from companyScrapper import Company
-from employeeScrapper import Person
-from gptControler import company_evaluation, employee_evaluation
+from controllers.companyScrapper import Company
+from controllers.employeeScrapper import Person
+from controllers.gptControler import company_evaluation, employee_evaluation
+# from companyScrapper import Company
+# from employeeScrapper import Person
+# from gptControler import company_evaluation, employee_evaluation
 
 
 # Defining variables
