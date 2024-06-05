@@ -198,10 +198,6 @@ def employee_orchestrator(driver: webdriver.Chrome, selected_companies: dict, th
             employee_position = empl_info.position
             employee_education = empl_info.educations
             employees_db[cmp][employee_name] = empl_info
-            # Check if the employee name already exists in the database
-            if employee_name in employees_db[cmp]:
-                print(f"Employee {employee_name} already exists in the database for company {cmp}. Skipping.")
-                continue
             print(f"Evaluating the employee {employee_name} that works as {employee_position} and has a background: {employee_education}")
             # Evaluating individual employee
             score, response = employee_evaluation(employee_name, employee_position, employee_education)
@@ -211,14 +207,10 @@ def employee_orchestrator(driver: webdriver.Chrome, selected_companies: dict, th
             print(f"The reason for that score is: {response}")
 
             # Filter selected employees
-            if score > threshold:
+            if score >= threshold:
                 selected_employees[cmp].append(empl_info)
 
     return employees_db, selected_employees
-
-
-
-
 
 
 if __name__ == "__main__":
@@ -229,24 +221,14 @@ if __name__ == "__main__":
     """
     # Testing company employee extraction
     driver = login()
-    company_url = r"https://www.linkedin.com/company/mott-macdonald/"
 
-    # Extracting employees
-    company_info = company_scrapping(url_link =company_url, driver=driver,employees=True)
-    print(company_info.employees)
-
-
-
-
-
-
-    # person_url = r'https://www.linkedin.com/in/blanca-huergo?miniProfileUrn=urn%3Ali%3Afs_miniProfile%3AACoAACzvme4B04DUBUbk-3nMN_y71v7x3BrczUA'
-    # fermin = Person(linkedin_url=person_url, driver=driver)
-    # print(f"The name of the person is: {fermin.name}")
-    # print(f"The about of the person is: {fermin.about}")
-    # print(f"The position of the person is: {fermin.position}")
-    # print(f"The education of the person is: {fermin.educations}")
-    # print(f"The location of the person is: {fermin.location}")
+    person_url = r'https://www.linkedin.com/in/ferminbazo/'
+    fermin = Person(linkedin_url=person_url, driver=driver)
+    print(f"The name of the person is: {fermin.name}")
+    print(f"The about of the person is: {fermin.about}")
+    print(f"The position of the person is: {fermin.position}")
+    print(f"The education of the person is: {fermin.educations}")
+    print(f"The location of the person is: {fermin.location}")
 
 
     # hrefs = company_listing(driver=driver,n_pages=5)

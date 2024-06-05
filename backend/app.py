@@ -48,7 +48,8 @@ def get_potential_customers(text: TextInput):
     print(f"The selected companies are: {selected_companies}")
     # Scraping, evaluating and selecting right employees to contact
     print("Starting employee evaluation")
-    employees_db, selected_employees = linkedinControler.employee_orchestrator(driver=driver, selected_companies=selected_companies, threshold=0.9)
+    employees_db, selected_employees = linkedinControler.employee_orchestrator(driver=driver, selected_companies=selected_companies, threshold=0)
+    print(f"The selected employees are: {selected_employees}")
     return {"companies_db": companies_db, "selected_companies": selected_companies, "employees_db": employees_db, "selected_employees": selected_employees}
 
 if __name__ == "__main__":
