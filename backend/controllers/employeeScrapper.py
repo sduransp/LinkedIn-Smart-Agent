@@ -6,6 +6,7 @@ from selenium.webdriver.support import expected_conditions as EC
 from selenium.common.exceptions import NoSuchElementException
 import sys
 import os
+import json
 from urllib.parse import urlparse
 sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '..')))
 from models.linkedin import Experience, Education, Scraper, Interest, Accomplishment, Contact
@@ -169,20 +170,24 @@ class Person(Scraper):
                 EC.presence_of_element_located((By.XPATH, "//h1[contains(@class, 'text-heading-xlarge')]"))
             )
             self.name = name_element.text.strip()
-            print(f"The name of the candidate is: {self.name}")
         except Exception as e:
             print(f"Error finding name: {e}")
             self.name = None
 
         try:
-            location_element = WebDriverWait(self.driver, 10).until(
+            location_element = WebDriverWait(self.driver, 5).until(
                 EC.presence_of_element_located((By.XPATH, "//div[contains(@class, 'xuIJiNRXaIZWVrOyfaSzntODmqigbZQGY') and contains(@class, 'mt2')]//span[contains(@class, 'text-body-small') and contains(@class, 'break-words')]"))
             )
             self.location = location_element.text.strip()
-            print(f"The location of the candidate is: {self.location}")
         except Exception as e:
-            print(f"Error finding location: {e}")
-            self.location = None
+            try:
+                location_element = WebDriverWait(self.driver, 5).until(
+                EC.presence_of_element_located((By.XPATH, "//div[contains(@class, 'vLlyBehSpoGLDKgTJFNHnMWkAgrPjNdGCSPWU') and contains(@class, 'mt2')]//span[contains(@class, 'text-body-small') and contains(@class, 'break-words')]"))
+            )
+                self.location = location_element.text.strip()
+            except:
+                print(f"Error finding location: Replaced by unknown")
+                self.location = "Unknown"
 
         # Extract the current position (job title) from the profile.
         try:
@@ -190,7 +195,6 @@ class Person(Scraper):
                 EC.presence_of_element_located((By.XPATH, "//div[@data-generated-suggestion-target][contains(@class, 'text-body-medium')]"))
             )
             self.position = position_element.text.strip()
-            print(f"The position of the candidate is: {self.position}")
         except Exception as e:
             print(f"Error finding position: {e}")
             self.position = None
@@ -208,9 +212,7 @@ class Person(Scraper):
         try:
             image_element = self.driver.find_element(By.XPATH, "//div[contains(@class, 'pv-top-card__non-self-photo-wrapper')]//img[contains(@class, 'pv-top-card-profile-picture__image--show')]")
             self.image = image_element.get_attribute('src').strip()
-            print(f"The url of the image for the profile is: {self.image}")
         except Exception as e:
-            print(f"Error finding profile image: {e}")
             self.image = None
 
     def scrape_logged_in(self, close_on_complete=False):
@@ -228,7 +230,6 @@ class Person(Scraper):
         self.wait(1)
 
         # Scrape name and location information from the profile.
-        print("Getting name and location...")
         self.get_name_and_location()
 
         # Scrolling to ensure all parts of the page are loaded.
@@ -236,14 +237,12 @@ class Person(Scraper):
         self.driver.execute_script("window.scrollTo(0, Math.ceil(document.body.scrollHeight/1.5));")
 
         # Scrape the education section of the LinkedIn profile.
-        print("Getting education")
         self.get_educations()
 
         # Reload the LinkedIn profile page to reset any state changed by scrolling.
         self.driver.get(self.linkedin_url)
 
         # Grab image
-        print("Grabbing profile image")
         self.get_profile_image()
 
         # Close the driver if specified to do so.
@@ -273,19 +272,20 @@ class Person(Scraper):
             return None
 
     def __repr__(self):
-        return "<Person {name}\n\nExperience\n{pos}\n\nEducation\n{edu}\n\Image\n{image}>".format(
-            name=self.name,
-            about=self.about,
-            pos=self.position,
-            edu=self.educations,
-            int=self.interests,
-            acc=self.accomplishments,
-            conn=self.contacts,
-            of_interest=self.contact_of_interest,
-            image=self.image,
-            reason = self.reason,
-            location=self.location
-        )
+        _output = {
+            "name": self.name,
+            "about": self.about,
+            "position": self.position,  # corregido de 'pos'
+            "educations": self.educations,  # corregido de 'edu'
+            "interests": self.interests,  # corregido de 'int'
+            "accomplishments": self.accomplishments,  # falta en tu código
+            "contacts": self.contacts,  # falta en tu código
+            "contact_of_interest": self.contact_of_interest,  # falta en tu código
+            "image": self.image,
+            "reason": self.reason,
+            "location": self.location
+        }
+        json.dumps(_output).replace('\n', '')
     
 if __name__ == "__main__":
     pass

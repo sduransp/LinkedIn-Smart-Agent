@@ -1,0 +1,20 @@
+{
+    "Google DeepMind\nGoogle DeepMind": {
+        "linkedin_url": "https://www.linkedin.com/company/googledeepmind/",
+        "name": "Google DeepMind\nGoogle DeepMind",
+        "about_us": "We’re a team of scientists, engineers, machine learning experts and more, working together to advance the state of the art in artificial intelligence. We use our technologies for widespread public benefit and scientific discovery, and collaborate with others on critical challenges, ensuring safety and ethics are the highest priority.\n\nOur long term aim is to solve intelligence, developing more general and capable problem-solving systems, known as artificial general intelligence (AGI). \n\nGuided by safety and ethics, this invention could help society find answers to some of the world’s most pressing and fundamental scientific challenges.\n \nWe have a track record of breakthroughs in fundamental AI research, published in journals like Nature, Science, and more.Our programs have learned to diagnose eye diseases as effectively as the world’s top doctors, to save 30% of the energy used to keep data centres cool, and to predict the complex 3D shapes of proteins - which could one day transform how drugs are invented.",
+        "founded": "2010",
+        "industry": "Research Services",
+        "company_size": "501-1,000 employees",
+        "specialties": "Artificial Intelligence and Machine Learning",
+        "employees": [
+            "https://www.linkedin.com/in/blanca-huergo?miniProfileUrn=urn%3Ali%3Afs_miniProfile%3AACoAACzvme4B04DUBUbk-3nMN_y71v7x3BrczUA",
+            "https://www.linkedin.com/in/jonas-pfeiffer?miniProfileUrn=urn%3Ali%3Afs_miniProfile%3AACoAABCs4RQB092xm7BVNGfx24bamJoj7CRdE1o",
+            "https://www.linkedin.com/in/enric-corona-751802b6?miniProfileUrn=urn%3Ali%3Afs_miniProfile%3AACoAABiuEa0BgrUYKnh-7cZR5zR6CHFt56rYEYk"
+        ],
+        "potential_customer": 0.9,
+        "reason": "Compatibility Score: 0.9\n\nExplanation:\nThe actual company description aligns closely with the target profile description of Google DeepMind in several key areas:\n\n1. Industry Relevance: Both descriptions emphasize a focus on artificial intelligence and machine learning, which is a core specialty of Google DeepMind. This indicates a strong match in terms of industry relevance.\n\n2. Value Alignment: The target profile mentions a commitment to safety, ethics, and public benefit, which aligns with the actual company's requirement for a strong commitment to sustainability and ethical practices.\n\n3. Global Reach and Diverse Team: While the target profile does not explicitly mention the size or diversity of the team, Google DeepMind is a well-known entity with a global impact, suggesting it likely has a diverse team. However, the actual company description specifies a medium-sized company, which may not fully align with Google DeepMind's status as part of the larger Alphabet Inc. conglomerate.\n\n4. Track Record and Achievements: Google DeepMind has a proven track record of breakthroughs in AI research, as mentioned in the target profile. This demonstrates leadership in the technology sector, which is a requirement in the actual company description.\n\nThe score is not a full 1.0 due to the lack of explicit information about the company size in the target profile. Google DeepMind, being part of Alphabet Inc., might exceed the \"medium-sized\" criterion specified in the actual company description. However, given the strong alignment in all other aspects, a high compatibility score of 0.9 is justified.",
+        "contact_people": null,
+        "image": "https://media.licdn.com/dms/image/D4E0BAQEntrYwxPlbQA/company-logo_200_200/0/1692960425188/googledeepmind_logo?e=1726099200&v=beta&t=oqLEozQ5yO3zXNZh3SUFxNgGk9qmsOjDCeU_nmqIxJY"
+    }
+}

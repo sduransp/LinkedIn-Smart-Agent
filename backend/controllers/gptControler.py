@@ -81,7 +81,7 @@ def company_evaluation(requirements:str, company_description:str)-> float:
 
     return(score, response)
 
-def employee_evaluation(employee_name: str, employee_position: str, employee_education: list) -> float:
+def employee_evaluation(employee_name: str, employee_position: str, employee_education: list, company_info:str) -> float:
     """
         Evaluates how closely an employee's profile matches a given target profile using GPT-4 Turbo model provided by Azure.
 
@@ -121,6 +121,7 @@ def employee_evaluation(employee_name: str, employee_position: str, employee_edu
                     - Name: {employee_name}
                     - Position: {employee_position}
                     - Education: {employee_education_str}
+                    - Company: {company_info}
 
                     Task:
                     Evaluate how closely the actual employee details match the target profile description. Return a compatibility score ranging from 0 to 1, where 0 indicates no suitability and 1 indicates total suitability.

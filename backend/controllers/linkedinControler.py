@@ -78,17 +78,13 @@ def company_listing(driver:webdriver.Chrome, n_pages:int = 100) -> list:
         hrefs.extend(link.get('href') for link in company_links)
 
         try:
-            print(f"On loop: {loop}")
             # Wait for the 'Next' button to be present and visible
             next_btn = wait.until(
                 EC.element_to_be_clickable((By.CSS_SELECTOR, "button.artdeco-button.artdeco-button--muted.artdeco-button--icon-right.artdeco-button--1.artdeco-button--tertiary.ember-view.artdeco-pagination__button.artdeco-pagination__button--next"))
             )
-            print(next_btn)
             if next_btn:
-                print("Clicking")
                 # driver.execute_script("arguments[0].click();", next_btn)
                 next_btn.click()
-                print("Clicked")
                 time.sleep(1)
                 loop = loop +1
             else:
@@ -139,19 +135,15 @@ def company_orchestrator(driver:webdriver.Chrome, companies:list, requirements:s
         company_info = company_scrapping(url, driver)
         name = company_info.name
         company_description = f"Company Name: {name}\nAbout Us: {company_info.about_us}\nSpecialties: {company_info.specialties}\nIndustry: {company_info.industry}"
-        print(f"The company being evaluated is: {company_description}")
         score, reason = company_evaluation(requirements=requirements, company_description=company_description)
         company_info.potential_customer = score
         company_info.reason = reason
         companies_db[name] = company_info
-        print(f"The compatibility score is: {score}")
-        print(f"The reason for that score is: {reason}")
         # Ensuring that the score has been obtained
         if not isinstance(score, float):
             score = 0.0
         if score > threshold:
             selected_companies[name] = company_info
-        
         time.sleep(0.1)
     
     # get employees for filtered companies
@@ -187,10 +179,8 @@ def employee_orchestrator(driver: webdriver.Chrome, selected_companies: dict, th
         selected_employees[cmp] = []
         # Retrieving list of all employees in the company
         all_employees = selected_companies[cmp].employees
-        print(f"All employees are: {all_employees}")
         # Getting information for each employee
         for employee_url in all_employees:
-            print(f"Going for URL: {employee_url}")
             # Scraping individual employee information
             empl_info = Person(linkedin_url=employee_url, driver=driver, close_on_complete=False)
             # Adding info to the data structure
@@ -198,13 +188,11 @@ def employee_orchestrator(driver: webdriver.Chrome, selected_companies: dict, th
             employee_position = empl_info.position
             employee_education = empl_info.educations
             employees_db[cmp][employee_name] = empl_info
-            print(f"Evaluating the employee {employee_name} that works as {employee_position} and has a background: {employee_education}")
+            company_information = selected_companies[cmp].about_us
             # Evaluating individual employee
-            score, response = employee_evaluation(employee_name, employee_position, employee_education)
+            score, response = employee_evaluation(employee_name, employee_position, employee_education,company_information)
             employees_db[cmp][employee_name].contact_of_interest = score
             employees_db[cmp][employee_name].reason = response
-            print(f"The compatibility score of the employee is {score}")
-            print(f"The reason for that score is: {response}")
 
             # Filter selected employees
             if score >= threshold:
@@ -212,6 +200,40 @@ def employee_orchestrator(driver: webdriver.Chrome, selected_companies: dict, th
 
     return employees_db, selected_employees
 
+def company_parser(Company):
+    """Convert a Company object to a dictionary."""
+    return {
+        'linkedin_url': Company.linkedin_url,
+        'name': Company.name,
+        'about_us': Company.about_us,
+        'founded': Company.founded,
+        'industry': Company.industry,
+        'company_size': Company.company_size,
+        'specialties': Company.specialties,
+        'employees': Company.employees,
+        'potential_customer': Company.potential_customer,
+        'reason': Company.reason,
+        'contact_people': Company.contact_people,
+        'image': Company.image
+    }
+def person_parser(person):
+    """Convert a Person object to a dictionary."""
+    return {
+        'name': person.name,
+        'position': person.position,
+        'educations': [education_parser(edu) for edu in person.educations],
+        'contact_of_interest': person.contact_of_interest,
+        'image': person.image,
+        'reason': person.reason,
+        'location': person.location
+    }
+
+def education_parser(education):
+    """Convert an Education object to a dictionary."""
+    return {
+        'institution_name': education.institution_name,
+        'degree': education.degree
+    }
 
 if __name__ == "__main__":
 
@@ -224,11 +246,11 @@ if __name__ == "__main__":
 
     person_url = r'https://www.linkedin.com/in/ferminbazo/'
     fermin = Person(linkedin_url=person_url, driver=driver)
-    print(f"The name of the person is: {fermin.name}")
-    print(f"The about of the person is: {fermin.about}")
-    print(f"The position of the person is: {fermin.position}")
+    # print(f"The name of the person is: {fermin.name}")
+    # print(f"The about of the person is: {fermin.about}")
+    # print(f"The position of the person is: {fermin.position}")
     print(f"The education of the person is: {fermin.educations}")
-    print(f"The location of the person is: {fermin.location}")
+    # print(f"The location of the person is: {fermin.location}")
 
 
     # hrefs = company_listing(driver=driver,n_pages=5)
