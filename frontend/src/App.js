@@ -6,6 +6,7 @@ import BrandIcons from './components/BrandIcons'
 import 'bootstrap/dist/css/bootstrap.min.css';
 import Trending from './components/Trending';
 import Products from './components/Products';
+import Results from './components/Results';
 import Login, { Render } from 'react-login-page';
 import Logo from 'react-login-page/logo';
 
@@ -14,6 +15,8 @@ import {
   Routes,
   Route,
 } from "react-router-dom";
+
+const publicUrl = "http://0.0.0.0:8000"
 
 const App = () => {
     return (
@@ -34,8 +37,9 @@ const App = () => {
           <BrandIcons/>
         </div>
         <Routes>
-          <Route exact path={process.env.PUBLIC_URL+'/'} component={Trending}/>
-          <Route path={process.env.PUBLIC_URL +'/search/:key'} component={Products}/>
+          <Route exact path={publicUrl+'/'} component={Trending}/>
+          <Route path={publicUrl +'/search/:key'} component={Products}/>
+          <Route path="/results" element={<Results />} /> {/* Nueva ruta para resultados */}
         </Routes>
       </div>
     );
