@@ -6,22 +6,12 @@
             "educations": [
                 {
                     "institution_name": "University of Oxford",
-                    "linkedin_url": null,
-                    "website": null,
-                    "industry": null,
-                    "type": null,
-                    "headquarters": null,
-                    "company_size": null,
-                    "founded": null,
-                    "from_date": null,
-                    "to_date": null,
-                    "description": null,
                     "degree": "Bachelor's degree (Joint Honours), Mathematics and Computer Science"
                 }
             ],
-            "contact_of_interest": 0.2,
+            "contact_of_interest": 0.1,
             "image": "https://media.licdn.com/dms/image/C4E03AQEpcQwxM2BP0Q/profile-displayphoto-shrink_400_400/0/1647682395391?e=1723680000&v=beta&t=lSG68-hM4VCKGnz5uyjlmABfOAgy-dKmDfHAAdDQQ18",
-            "reason": "Compatibility Score: 0.2\n\nExplanation:\nThe actual employee, Blanca Huergo, is a Research Engineer at Google DeepMind, which is a highly specialized position in artificial intelligence and machine learning. While Google as a company has a significant international presence and could potentially require translation services, Blanca's role as a Research Engineer does not align well with the target profile's emphasis on positions related to international operations, marketing, sales, or content creation. Her position is more technical and research-focused rather than managerial or directly involved in content that spans multiple languages or regions.\n\nBlanca's educational background in Mathematics and Computer Science from the University of Oxford is impressive but does not indicate a specialization in international business, marketing, communications, or languages, which are more relevant to the target profile.\n\nGoogle DeepMind's work on artificial intelligence, while globally impactful, does not inherently suggest a need for translation services based on the information provided. There is no mention of Blanca or her company being involved in activities that require multilingual communication or expansion into new linguistic markets.\n\nTherefore, while Blanca may work for a company with an international footprint, her specific role and background do not closely match the desired profile for individuals who are likely to need translation services. The compatibility score is not zero because Google, as a larger entity, may still have departments or roles that require translation services, but Blanca's role as a Research Engineer at Google DeepMind does not fit the target profile well.",
+            "reason": "Compatibility Score: 0.1\n\nExplanation:\nThe actual employee, Blanca Huergo, is a Research Engineer at Google DeepMind, which is a highly specialized position in artificial intelligence and machine learning. While Google as a company has a significant international presence and could potentially require translation services, Blanca's specific role as a Research Engineer does not align well with the target profile's emphasis on positions related to international operations, marketing, sales, or content creation.\n\nBlanca's educational background in Mathematics and Computer Science from the University of Oxford, although impressive, does not indicate a focus on international business, marketing, communications, or languages, which are preferred areas of study for the target profile.\n\nThe company attributes of Google DeepMind, as described, focus on scientific discovery, AI research, and technological advancements for public benefit. There is no mention of a need for multilingual communication or active expansion into new linguistic markets or regions, which are key characteristics sought in the target profile.\n\nGiven these considerations, Blanca Huergo's profile does not closely match the desired employee profile for translation services. The compatibility score is therefore low, but not zero, as Google's international presence could imply some level of indirect relevance. However, Blanca's role and background do not directly align with the criteria outlined in the target profile description.",
             "location": "Unknown"
         },
         "Jonas Pfeiffer": {
@@ -30,78 +20,28 @@
             "educations": [
                 {
                     "institution_name": "Technische Universität Darmstadt",
-                    "linkedin_url": null,
-                    "website": null,
-                    "industry": null,
-                    "type": null,
-                    "headquarters": null,
-                    "company_size": null,
-                    "founded": null,
-                    "from_date": null,
-                    "to_date": null,
-                    "description": null,
                     "degree": "Doctor of Philosophy - PhD, Computer Science"
                 },
                 {
                     "institution_name": "New York University",
-                    "linkedin_url": null,
-                    "website": null,
-                    "industry": null,
-                    "type": null,
-                    "headquarters": null,
-                    "company_size": null,
-                    "founded": null,
-                    "from_date": null,
-                    "to_date": null,
-                    "description": null,
                     "degree": "Researcher, Computer Science"
                 },
                 {
                     "institution_name": "University of Mannheim",
-                    "linkedin_url": null,
-                    "website": null,
-                    "industry": null,
-                    "type": null,
-                    "headquarters": null,
-                    "company_size": null,
-                    "founded": null,
-                    "from_date": null,
-                    "to_date": null,
-                    "description": null,
                     "degree": "Master of Science - MS, Data and Web Science"
                 },
                 {
                     "institution_name": "University of Massachusetts Amherst",
-                    "linkedin_url": null,
-                    "website": null,
-                    "industry": null,
-                    "type": null,
-                    "headquarters": null,
-                    "company_size": null,
-                    "founded": null,
-                    "from_date": null,
-                    "to_date": null,
-                    "description": null,
                     "degree": "Master of Science - MS, Computer Science"
                 },
                 {
                     "institution_name": "University of Augsburg",
-                    "linkedin_url": null,
-                    "website": null,
-                    "industry": null,
-                    "type": null,
-                    "headquarters": null,
-                    "company_size": null,
-                    "founded": null,
-                    "from_date": null,
-                    "to_date": null,
-                    "description": null,
                     "degree": "Bachelor of Science (B.Sc.), Business Informatics"
                 }
             ],
             "contact_of_interest": 0.2,
             "image": "https://media.licdn.com/dms/image/C4D03AQGfSRMnIqBaAw/profile-displayphoto-shrink_400_400/0/1546721761332?e=1723680000&v=beta&t=MaE8JjAO92r0Ix3gmcWgWDPTLNOzP9ckvCMB2Jv6dK8",
-            "reason": "Compatibility Score: 0.2\n\nExplanation:\nThe actual employee, Jonas Pfeiffer, is a Research Scientist at Google DeepMind, which is a highly specialized position in artificial intelligence and machine learning. While his role is prestigious and indicates a high level of expertise, it does not align with the target profile's emphasis on positions related to international operations, marketing, sales, or content creation. His position does not involve managing content, communications, or marketing efforts across multiple languages or regions, which is a key aspect of the desired profile.\n\nJonas's educational background is impressive, with multiple degrees in computer science and related fields. However, there is no indication that his education is specifically in international business, marketing, communications, languages, or any area related to cross-cultural or global operations. Therefore, his educational background does not match the criteria outlined in the target profile.\n\nThe company, Google DeepMind, is a multinational corporation with a significant international presence, which aligns with the company size and reach aspect of the target profile. However, the focus of DeepMind on artificial intelligence research and development does not inherently indicate a need for translation services, as their work is more technical and research-oriented rather than involving multilingual communication or expansion into new linguistic markets.\n\nWhile Jonas Pfeiffer is undoubtedly skilled and works for a company with an international footprint, the specifics of his role and expertise do not align with the characteristics of the ideal candidate for translation services. Therefore, the compatibility score is low, reflecting the limited match between the actual employee details and the target profile description.",
+            "reason": "Compatibility Score: 0.2\n\nExplanation:\nThe actual employee, Jonas Pfeiffer, is a Research Scientist at Google DeepMind, which is a highly specialized position in artificial intelligence and machine learning. While Google DeepMind is a prestigious and influential company in the tech industry, the role of a Research Scientist does not align closely with the target profile's desired positions, which are more focused on international operations, marketing, sales, or content creation related to translation services.\n\nJonas's educational background is impressive, with multiple degrees in computer science, data science, and business informatics. However, there is no indication of education in international business, marketing, communications, languages, or cross-cultural operations, which are preferred for the target profile.\n\nGoogle DeepMind, as part of Google, likely has an international footprint and is involved in global commerce. However, the details provided do not specifically mention Jonas's involvement in international operations or content management across multiple languages or regions.\n\nThe company attributes mentioned in Jonas's profile, such as advancing artificial intelligence and scientific discovery, do not directly demonstrate a need for multilingual communication or expansion into new linguistic markets, which are key characteristics of the target profile.\n\nOverall, while Jonas Pfeiffer may work for a company with international reach and his skills are undoubtedly valuable, his specific role and background do not align well with the characteristics of the ideal candidate for translation services. Therefore, the compatibility score is low.",
             "location": "Unknown"
         },
         "Enric Corona": {
@@ -110,36 +50,112 @@
             "educations": [
                 {
                     "institution_name": "Universitat Pompeu Fabra",
-                    "linkedin_url": null,
-                    "website": null,
-                    "industry": null,
-                    "type": null,
-                    "headquarters": null,
-                    "company_size": null,
-                    "founded": null,
-                    "from_date": null,
-                    "to_date": null,
-                    "description": null,
                     "degree": "Master in Intelligent Interactive Systems, Machine learning"
                 },
                 {
                     "institution_name": "Universitat Politècnica de Catalunya",
-                    "linkedin_url": null,
-                    "website": null,
-                    "industry": null,
-                    "type": null,
-                    "headquarters": null,
-                    "company_size": null,
-                    "founded": null,
-                    "from_date": null,
-                    "to_date": null,
-                    "description": null,
                     "degree": "Ingeniería en sistemas electrónicos, Ingeniería de telecomunicaciones"
                 }
             ],
             "contact_of_interest": 0.1,
             "image": "https://media.licdn.com/dms/image/D4E03AQHvVz3agKBQsg/profile-displayphoto-shrink_400_400/0/1700471337889?e=1723680000&v=beta&t=CiLUf79Oh5RyHQWu6_Q4TU9zw1PboBikzrJEw0-Y5tw",
-            "reason": "Compatibility Score: 0.1\n\nExplanation:\nThe actual employee, Enric Corona, is a Research Scientist at Google DeepMind, which is a highly specialized position in artificial intelligence and machine learning. While Google DeepMind is a prestigious and influential company, it does not directly align with the target profile description that focuses on roles related to international operations, marketing, sales, or content creation. Enric's position as a Research Scientist does not involve overseeing or managing content, communications, or marketing efforts across multiple languages or regions, which is a key aspect of the desired profile.\n\nEnric's educational background in Intelligent Interactive Systems, Machine Learning, Electronic Systems Engineering, and Telecommunications Engineering, while impressive, does not indicate a focus on international business, marketing, communications, languages, or cross-cultural/global operations. Therefore, it does not match the educational criteria outlined in the target profile.\n\nGoogle DeepMind's work on artificial intelligence for public benefit and scientific discovery, as well as its ethical approach, is commendable but does not demonstrate a need for multilingual communication or active expansion into new linguistic markets or regions, which are important company attributes according to the target profile.\n\nGiven these considerations, Enric Corona does not fit the ideal candidate profile for translation services. However, a minimal score is given to acknowledge that Google, as a larger entity, may have divisions that require translation services, and Enric's association with such a company could potentially lead to indirect opportunities. Therefore, a compatibility score of 0.1 is assigned to reflect a very low but not entirely nonexistent suitability.",
+            "reason": "Compatibility Score: 0.1\n\nExplanation:\nThe actual employee, Enric Corona, is a Research Scientist at Google DeepMind, which is a highly specialized position in artificial intelligence and machine learning. While Google as a company has a significant international presence and could potentially require translation services, the specific role of a Research Scientist at DeepMind does not align well with the target profile description that focuses on positions related to international operations, marketing, sales, or content creation.\n\nEnric's educational background in Intelligent Interactive Systems, Machine Learning, Electronic Systems Engineering, and Telecommunications Engineering, although impressive, does not indicate a direct connection to international business, marketing, communications, or languages, which are the preferred fields of study according to the target profile.\n\nThe company attributes mentioned for DeepMind focus on scientific discovery, AI research, and technological advancements for public benefit, rather than on multilingual communication or active expansion into new linguistic markets.\n\nGiven these considerations, Enric Corona does not fit the ideal candidate profile for translation services. However, a minimal score is given due to the international reach of Google, which could indirectly suggest a potential need for translation services within the broader organization, albeit not directly related to Enric's role.",
+            "location": "Unknown"
+        }
+    },
+    "Appen\nAppen": {
+        "Lidia M.": {
+            "name": "Lidia M.",
+            "position": "Data science, research and psychology",
+            "educations": [
+                {
+                    "institution_name": "Universidad Nacional de Educación a Distancia - U.N.E.D.",
+                    "degree": "Master in Methodologies of Behavioral and Health Sciences, Estatistics"
+                },
+                {
+                    "institution_name": "Universidad Rey Juan Carlos",
+                    "degree": "Degree in Psychology, with specialization in Work Psychology, Psicología del trabajo"
+                }
+            ],
+            "contact_of_interest": 0.1,
+            "image": "https://media.licdn.com/dms/image/C4D03AQHAm77MSxb4MA/profile-displayphoto-shrink_400_400/0/1559762200097?e=1723680000&v=beta&t=PyHO6RF2cnfUXWP-IfgIRHvEM_4nnyHAfca-tVcJ3EM",
+            "reason": "Compatibility Score: 0.1\n\nExplanation:\nThe actual employee, Lidia M., does not closely match the target profile description for several reasons:\n\n1. **Position**: Lidia M.'s position is in \"Data science, research and psychology,\" which does not align with the desired titles such as Localization Manager, Global Marketing Manager, International Sales Manager, or Content Manager. Her role does not seem to involve managing content, communications, or marketing efforts across multiple languages or regions.\n\n2. **Industry**: While the company Lidia M. works for is involved in AI and data, which can be international in scope, there is no specific mention of industries that typically require translation services such as legal, medical, technical, software, marketing, publishing, education, tourism, and hospitality.\n\n3. **Company Size and Reach**: The company's description suggests it has an international reach, which aligns with the target profile's preference for companies with an international footprint. However, there is no explicit mention of the company's size or whether it is involved in exporting goods or services, or if it's a multinational corporation or a startup expanding into new regions.\n\n4. **Educational Background**: Lidia M. has a Master's in Methodologies of Behavioral and Health Sciences and a Degree in Psychology with a specialization in Work Psychology. While impressive, this does not align with the desired educational background in international business, marketing, communications, languages, or areas related to cross-cultural or global operations.\n\n5. **Company Attributes**: There is no information provided that indicates the company has a need for multilingual communication, such as having materials available in multiple languages or actively expanding into new linguistic markets or regions.\n\nGiven these points, Lidia M. does not appear to be a strong match for the target profile seeking individuals likely to need translation services. The score is not zero because there is a slight possibility that her company's international reach could eventually require translation services, but based on the information provided, the match is minimal.",
+            "location": "Unknown"
+        },
+        "Sergio M.": {
+            "name": "Sergio M.",
+            "position": "Social Media y Diseño Web en Agencia Carabé",
+            "educations": [
+                {
+                    "institution_name": "Universidad de Extremadura",
+                    "degree": "Máster en Gestión de la Información en Redes Sociales y de los productos virtuales en internet, Comunicación empresarial"
+                },
+                {
+                    "institution_name": "Universidad Rey Juan Carlos",
+                    "degree": "Grado, Publicidad y Relaciones Públicas"
+                },
+                {
+                    "institution_name": "Universidad de Extremadura",
+                    "degree": "Diplomatura, Estudios Empresariales"
+                },
+                {
+                    "institution_name": "Sagrado Corazón de Jesús, Cáceres",
+                    "degree": "Bachillerato"
+                }
+            ],
+            "contact_of_interest": 0.3,
+            "image": "https://media.licdn.com/dms/image/C5603AQFUhsOyIyaG-Q/profile-displayphoto-shrink_400_400/0/1517027112148?e=1723680000&v=beta&t=ZrY-SLiDfXTVG9qkV7UVKPRkBMd26sOFkl2n5Iy6Gko",
+            "reason": "Compatibility Score: 0.3\n\nExplanation:\nThe actual employee, Sergio M., does not seem to have a direct match with the target profile description in several key areas:\n\n1. **Position**: Sergio M.'s position is \"Social Media y Diseño Web en Agencia Carabé,\" which translates to \"Social Media and Web Design at Carabé Agency.\" While this role involves content creation, it does not specifically align with the positions mentioned in the target profile, such as Localization Manager, Global Marketing Manager, or International Sales Manager. However, it does involve managing content, which is a partial match.\n\n2. **Industry**: The company's description does not clearly indicate that it operates within the industries that typically require translation services, such as legal, medical, or tourism. Instead, it focuses on data partnership for AI systems. This does not align well with the target industries.\n\n3. **Company Size and Reach**: There is no specific information provided about the company's size or international reach. The description suggests a focus on AI and data, which could have an international component, but this is not explicitly stated.\n\n4. **Educational Background**: Sergio M. has a strong educational background in social media management, business communication, advertising, and public relations. While this indicates an understanding of communication and marketing, it does not specifically relate to international business, languages, or cross-cultural operations as outlined in the target profile.\n\n5. **Company Attributes**: The company's description does not mention a need for multilingual communication or active expansion into new linguistic markets or regions. It focuses on AI advancements and industry news, which does not directly indicate a need for translation services.\n\nGiven these points, Sergio M. has some relevant skills and educational background in communication and content creation, which are tangentially related to the target profile. However, the lack of direct matches in position, industry focus, and company attributes related to translation services leads to a lower compatibility score. A score of 0.3 reflects that there is some potential for alignment, but it is not a strong match overall.",
+            "location": "Unknown"
+        },
+        "Alejandra Figueiras, PhD": {
+            "name": "Alejandra Figueiras, PhD",
+            "position": "Responsible AI | Lawyer | Data Scientist | Tech law and law tech | CIPP/E, AIGP-trained",
+            "educations": [
+                {
+                    "institution_name": "IAPP - International Association of Privacy Professionals",
+                    "degree": "AI Governance Professional"
+                },
+                {
+                    "institution_name": "Ilustre Colegio de la Abogacía de Madrid",
+                    "degree": "Práctica procesal contencioso-administrativa y Extranjería"
+                },
+                {
+                    "institution_name": "Esade",
+                    "degree": "Big Data Analytics for Executives"
+                },
+                {
+                    "institution_name": "IAPP - International Association of Privacy Professionals",
+                    "degree": "European Data Protection Training, Data Protection"
+                },
+                {
+                    "institution_name": "The Data Incubator",
+                    "degree": "Data Science, Washington D.C., U.S.A."
+                },
+                {
+                    "institution_name": "Private professors",
+                    "degree": "Python coding"
+                },
+                {
+                    "institution_name": "Universidad Complutense de Madrid",
+                    "degree": "PhD Law with Highest Honors, Administrative Law"
+                },
+                {
+                    "institution_name": "Universitat d'Alacant",
+                    "degree": "Doctor of Law - JD"
+                },
+                {
+                    "institution_name": "Center of Political and Constitutional Studies (Spain, http://www.cepc.gob.es)",
+                    "degree": "Master's degree, Constitutional Law and Political Science"
+                },
+                {
+                    "institution_name": "Universidad Central de Venezuela",
+                    "degree": "Lawyer"
+                }
+            ],
+            "contact_of_interest": 0.2,
+            "image": "https://media.licdn.com/dms/image/D4D03AQHPF_o24tmpqA/profile-displayphoto-shrink_400_400/0/1681842928965?e=1723680000&v=beta&t=kZAgQ71gHYw9cjjgUTmB6Qbr6lQFmvb1IDzUoJGI-6o",
+            "reason": "Compatibility Score: 0.2\n\nExplanation:\nAlejandra Figueiras, PhD, has an impressive background with a strong focus on law, data science, and artificial intelligence. However, her profile does not closely match the target profile description for several reasons:\n\n1. **Position**: Alejandra's titles (Responsible AI, Lawyer, Data Scientist, Tech law, and law tech) do not align with the positions mentioned in the target profile, such as Localization Manager, Global Marketing Manager, International Sales Manager, or Content Manager. Her roles seem to be more focused on legal aspects and data science within the tech industry rather than on content, communications, or marketing efforts that span multiple languages or regions.\n\n2. **Industry**: While the company Alejandra works for is involved in AI and data, which can be global in nature, there is no specific indication that it operates within the industries that typically require translation services, such as legal, medical, technical, software, marketing, publishing, education, tourism, and hospitality.\n\n3. **Company Size and Reach**: The company's description suggests it has an international reach and is a leader in its field, which could imply a need for translation services. However, there is no explicit mention of an international footprint or aspirations, nor of involvement in exporting goods or services.\n\n4. **Educational Background**: Alejandra's education is extensive and impressive, with a focus on law, data protection, and data science. However, there is no mention of degrees or certifications in international business, marketing, communications, languages, or areas related to cross-cultural or global operations that would indicate an understanding of or experience with multilingual content or international market dynamics.\n\n5. **Company Attributes**: There is no information provided that demonstrates a need for multilingual communication within Alejandra's company, such as websites, marketing materials, software, or documentation available in multiple languages. There is also no evidence of active expansion into new linguistic markets or regions.\n\nGiven these points, Alejandra's profile does not closely match the target profile description. The score of 0.2 reflects that while there may be some indirect relevance due to the international nature of AI and data science, the specific criteria outlined in the target profile are not met.",
             "location": "Unknown"
         }
     }

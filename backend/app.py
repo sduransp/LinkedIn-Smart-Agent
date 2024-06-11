@@ -9,20 +9,40 @@ from controllers import linkedinControler
 from controllers.companyScrapper import Company
 
 # Initialize FastAPI app
-main_app = FastAPI(docs_url="/", debug=False)
+main_app = FastAPI(docs_url="/", debug=True)
 
 def convert_to_dict(obj):
+    """
+    Convert an object to a dictionary if it is an instance of a known class.
+    Args:
+        obj (object): The object to convert.    
+    Returns:
+        dict: The dictionary representation of the object.   
+    Raises:
+        TypeError: If the object is not an instance of a known class.
+    """
     if isinstance(obj, Company):
         return obj.to_dict()
-    # Agregar otras conversiones si es necesario
-    raise TypeError(f'Object of type {obj.__class__.__name__} is not JSON serializable')
+    # Add other conversions if necessary
+    raise TypeError(f"Object of type {obj.__class__.__name__} is not JSON serializable")
 
 # Adding a CORS middleware
-def add_cors_middleware(application:FastAPI) -> None:
+def add_cors_middleware(application: FastAPI) -> None:
+    """
+    Add CORS middleware to the FastAPI application.
+    This function adds CORS (Cross-Origin Resource Sharing) middleware to the given
+    FastAPI application, allowing specified origins, credentials, methods, and headers.
+    Args:
+        application (FastAPI): The FastAPI application instance to which the middleware will be added.  
+    Returns:
+        None
+    """
     origins = [
-        "http://localhost",
+        "http://localhost:3000",
         "http://localhost:3125",
-        "http://0.0.0.0"
+        "http://0.0.0.0",
+        "http://0.0.0.0:8000",
+        "http://127.0.0.1:8000"
     ]
 
     application.add_middleware(
@@ -35,8 +55,20 @@ def add_cors_middleware(application:FastAPI) -> None:
 
 # Building the app
 def build_app() -> FastAPI:
+    """
+    Build and configure the FastAPI application.
+    This function creates a FastAPI application, adds CORS middleware, and includes
+    the necessary routers.
+    
+    Returns:
+        FastAPI: The configured FastAPI application instance.
+    """
+    # Initialize the main FastAPI application instance
     add_cors_middleware(main_app)
+    
+    # Include the status router
     main_app.include_router(status_router)
+    
     return main_app
 
 # Initialize the app
@@ -45,6 +77,18 @@ main_app = build_app()
 # API Endpoints
 @main_app.post("/clients")
 def get_potential_customers(text: TextInput):
+    """
+        Endpoint to get potential customers based on text input.
+        
+        This function logs into LinkedIn, lists companies, evaluates and filters them, 
+        scrapes and selects employees, and saves the results locally.
+        
+        Args:
+            text (TextInput): The input text containing requirements.
+            
+        Returns:
+            dict: A dictionary containing parsed databases and selected entities.
+    """
     # login
     driver = linkedinControler.login()
     print("Logged in")
@@ -66,7 +110,6 @@ def get_potential_customers(text: TextInput):
     cmp: {emp_name: linkedinControler.person_parser(employee) for emp_name, employee in employees_db[cmp].items()}
         for cmp in employees_db
     }
-
     selected_employee_parsed = {
         cmp: [linkedinControler.person_parser(employee) for employee in selected_employees[cmp]]
         for cmp in selected_employees
@@ -85,11 +128,7 @@ def get_potential_customers(text: TextInput):
     # Stop driver
     driver.quit()
 
-    # Unifying everything in an object so we can display it
-
-    # Parsing the output properly for communication
-
-    return {"companies_db": companies_db_parsed, "selected_companies": selected_companies_parsed, "employees_db": employee_db_parsed, "selected_employees": selected_employee_parsed}
+    return {"selected_companies": selected_companies_parsed, "selected_employees": selected_employee_parsed}
 
 if __name__ == "__main__":
     import uvicorn
