@@ -1,7 +1,7 @@
 {
-    "Google DeepMind\nGoogle DeepMind": {
+    "Google DeepMind": {
         "linkedin_url": "https://www.linkedin.com/company/googledeepmind/",
-        "name": "Google DeepMind\nGoogle DeepMind",
+        "name": "Google DeepMind",
         "about_us": "We’re a team of scientists, engineers, machine learning experts and more, working together to advance the state of the art in artificial intelligence. We use our technologies for widespread public benefit and scientific discovery, and collaborate with others on critical challenges, ensuring safety and ethics are the highest priority.\n\nOur long term aim is to solve intelligence, developing more general and capable problem-solving systems, known as artificial general intelligence (AGI). \n\nGuided by safety and ethics, this invention could help society find answers to some of the world’s most pressing and fundamental scientific challenges.\n \nWe have a track record of breakthroughs in fundamental AI research, published in journals like Nature, Science, and more.Our programs have learned to diagnose eye diseases as effectively as the world’s top doctors, to save 30% of the energy used to keep data centres cool, and to predict the complex 3D shapes of proteins - which could one day transform how drugs are invented.",
         "founded": "2010",
         "industry": "Research Services",
@@ -16,5 +16,22 @@
         "reason": "Compatibility Score: 0.9\n\nExplanation:\nThe actual company description aligns closely with the target profile description of Google DeepMind in several key areas:\n\n1. Industry Relevance: Both descriptions emphasize a focus on artificial intelligence and machine learning, which is a core specialty of Google DeepMind. This indicates a strong match in terms of industry relevance.\n\n2. Value Alignment: Google DeepMind's commitment to safety, ethics, and public benefit aligns with the actual company's requirement for a strong commitment to sustainability and ethical practices.\n\n3. Global Reach and Diverse Team: While the actual company description specifies a preference for a medium-sized company with a global reach and a diverse team, Google DeepMind is a part of Alphabet Inc. and has a significant global impact. The size of the company is not explicitly mentioned in the target profile, but given DeepMind's influence and the breadth of its research, it can be inferred that it has a substantial team that is likely diverse, given the nature of its work and location.\n\nThe reason for not giving a full score of 1 is due to the lack of explicit information about the company size and the exact nature of its team's diversity in the target profile description. Without this information, we cannot conclusively determine a perfect match in these areas. However, given the strong alignment in all other aspects, a high compatibility score of 0.9 is justified.",
         "contact_people": null,
         "image": "https://media.licdn.com/dms/image/D4E0BAQEntrYwxPlbQA/company-logo_200_200/0/1692960425188/googledeepmind_logo?e=1726099200&v=beta&t=oqLEozQ5yO3zXNZh3SUFxNgGk9qmsOjDCeU_nmqIxJY"
-    }
+    },
+    "Company2": {
+    "name": "HealthCorp",
+    "image": "https://via.placeholder.com/200",
+    "about_us": "We are a leading healthcare company.",
+    "founded": "1995",
+    "industry": "Healthcare",
+    "company_size": "1000-5000",
+    "specialties": "Pharmaceuticals, Health Services",
+    "potential_customer": 9.0,
+    "reason": "Strong market presence",
+    "linkedin_url": "https://www.linkedin.com/company/healthcorp",
+    "employees": [
+      "https://www.linkedin.com/in/employee3",
+      "https://www.linkedin.com/in/employee4"
+    ]
+  }
 }
+ 
