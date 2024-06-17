@@ -2,6 +2,8 @@
 
 This is an AI agent for identifying and contacting potential clients on LinkedIn. It automates the process of navigating through LinkedIn search result pages, extracting company and employee information, and allowing users to send messages to potential clients.
 
+![image1](https://github.com/sduransp/linkedin-agent/blob/5ca1620aa44e8e02dd7b2790a33940e5c38add90/frontend/src/images/app_image.png)
+
 ## Features
 
 - **Automated Search**: Automatically searches for companies on LinkedIn based on user input.
