@@ -29,7 +29,7 @@ To set up and run the LinkedIn agent locally, follow these steps:
     ```
 
 3. **Set up environment variables**:
-    Create a `.env` file in the root directory of your project and add the following variables:
+    
     ```
     LINKEDIN_USER=your_linkedin_username
     LINKEDIN_KEY=your_linkedin_password
