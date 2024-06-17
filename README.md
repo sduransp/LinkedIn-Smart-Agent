@@ -19,7 +19,7 @@ To set up and run the LinkedIn agent locally, follow these steps:
 
 1. **Clone the repository**:
     ```sh
-    git clone https://github.com/yourusername/linkedin-agent.git
+    git clone https://github.com/sduransp/linkedin-agent.git
     cd linkedin-agent
     ```
 
