@@ -20,7 +20,7 @@ To set up and run the LinkedIn agent locally, follow these steps:
 1. **Clone the repository**:
     ```sh
     git clone https://github.com/sduransp/linkedin-agent.git
-    cd linkedin-agent
+    cd linkedin-agent/backend
     ```
 
 2. **Install the required dependencies**:
@@ -31,8 +31,11 @@ To set up and run the LinkedIn agent locally, follow these steps:
 3. **Set up environment variables**:
     Create a `.env` file in the root directory of your project and add the following variables:
     ```
-    LINKEDIN_USERNAME=your_linkedin_username
-    LINKEDIN_PASSWORD=your_linkedin_password
+    LINKEDIN_USER=your_linkedin_username
+    LINKEDIN_KEY=your_linkedin_password
+    OPENAI_API_VERSION=your_api_version
+    OPENAI_ENDPOINT=your_openai_endpoint
+    OPENAI_KEY=your_openai_key
     ```
 
 4. **Run the application**:
