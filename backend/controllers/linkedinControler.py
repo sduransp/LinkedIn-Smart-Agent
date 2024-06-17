@@ -5,6 +5,7 @@ from selenium import webdriver
 from selenium.webdriver.common.by import By
 from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
+from selenium.common.exceptions import TimeoutException
 import time
 from controllers.companyScrapper import Company
 from controllers.employeeScrapper import Person
@@ -62,38 +63,48 @@ def company_listing(driver:webdriver.Chrome, n_pages:int = 100) -> list:
     """
     hrefs = []
     driver.get(URL)
-    wait = WebDriverWait(driver, 10)
+    wait = WebDriverWait(driver, 1)
     loop = 0
-    while True:
-        # Checking whether the number of pages has been reached
-        if loop >= n_pages:
-            break
-        # Scroll to the bottom of the page
-        driver.execute_script("window.scrollTo(0, document.body.scrollHeight);")
-        time.sleep(1)  # Allow time for any lazy-loaded content to load
+    while loop < n_pages:
+            print(f"Page number: {loop + 1}")
 
-        # Parse the page source with BeautifulSoup
-        soup = BeautifulSoup(driver.page_source, "html.parser")
-        company_links = soup.select('span.entity-result__title-text a.app-aware-link')
-        hrefs.extend(link.get('href') for link in company_links)
+            # Scroll to the bottom of the page
+            driver.execute_script("window.scrollTo(0, document.body.scrollHeight);")
+            time.sleep(2)  # Allow time for any lazy-loaded content to load
 
-        try:
-            # Wait for the 'Next' button to be present and visible
-            next_btn = wait.until(
-                EC.element_to_be_clickable((By.CSS_SELECTOR, "button.artdeco-button.artdeco-button--muted.artdeco-button--icon-right.artdeco-button--1.artdeco-button--tertiary.ember-view.artdeco-pagination__button.artdeco-pagination__button--next"))
-            )
-            if next_btn:
-                # driver.execute_script("arguments[0].click();", next_btn)
+            # Parse the page source with BeautifulSoup
+            soup = BeautifulSoup(driver.page_source, "html.parser")
+            company_links = soup.select('span.entity-result__title-text a.app-aware-link')
+            hrefs.extend(link.get('href') for link in company_links)
+
+            try:
+                # Espera a que el botón 'Next' esté presente y visible
+                next_btn = wait.until(
+                    EC.element_to_be_clickable((By.CSS_SELECTOR, "button.artdeco-button.artdeco-button--muted.artdeco-button--icon-right.artdeco-button--1.artdeco-button--tertiary.ember-view.artdeco-pagination__button.artdeco-pagination__button--next"))
+                )
                 next_btn.click()
-                time.sleep(1)
-                loop = loop +1
-            else:
-                print("El botón 'Siguiente' está deshabilitado o no se encontró.")
+                time.sleep(2)  # Adjust the sleep time as needed
+                loop += 1
+
+            except TimeoutException:
+                # Si no aparece el botón 'Next', navega hasta el final de la página y espera hasta que aparezca el botón
+                print("No se encontró el botón 'Next', navegando al final de la página.")
+                driver.execute_script("window.scrollTo(0, document.body.scrollHeight);")
+                time.sleep(2)  # Ajusta el tiempo de espera según sea necesario
+                try:
+                    next_btn = wait.until(
+                        EC.element_to_be_clickable((By.CSS_SELECTOR, "button.artdeco-button.artdeco-button--muted.artdeco-button--icon-right.artdeco-button--1.artdeco-button--tertiary.ember-view.artdeco-pagination__button.artdeco-pagination__button--next"))
+                    )
+                    next_btn.click()
+                    time.sleep(2)  # Adjust the sleep time as needed
+                    loop += 1
+                except TimeoutException:
+                    print("El botón 'Next' sigue sin aparecer después de navegar al final de la página.")
+                    break
+            except Exception as e:
+                print(f"Ocurrió un error: {str(e)}")
                 break
-        except Exception as e:
-            driver.save_screenshot('error_screenshot.png')
-            print(f"Ocurrió un error: {str(e)}")
-            break
+
     return hrefs
 
 def company_scrapping(url_link: str, driver: webdriver.Chrome,employees:bool = False) -> Company:

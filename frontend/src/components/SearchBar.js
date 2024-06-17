@@ -27,7 +27,7 @@ const SearchBar = () => {
     try {
       const response = await axios.post(`${publicUrl}/clients`, { text: searchValue });
       console.log('Response from backend:', response.data);
-      navigate('/results', { state: { results: response.data.selected_companies } });
+      navigate('/results', { state: { results: response.data.selected_companies, employees: response.data.selected_employees } });
     } catch (error) {
       console.error('Error fetching potential customers:', error);
       setError('An error occurred while searching. Please try again.');

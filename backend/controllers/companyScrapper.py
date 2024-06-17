@@ -222,28 +222,27 @@ class Company(Scraper):
     def scrape_logged_in(self, get_employees = True, close_on_complete = True):
         """Scrape LinkedIn when the user is logged in."""
         driver = self.driver
-
         driver.get(self.linkedin_url)
         wait = WebDriverWait(driver, 30)
         try:
             _  = wait.until(EC.presence_of_all_elements_located((By.XPATH, '//span[@dir="ltr"]')))
         except:
+
             return None
         # _ = WebDriverWait(driver, 10).until(EC.presence_of_all_elements_located((By.XPATH, '//span[@dir="ltr"]')))
-
         navigation = driver.find_element(By.CLASS_NAME, "org-page-navigation__items ")
-
         self.name = driver.find_element(By.XPATH,'//span[@dir="ltr"]').text.strip()
 
         # Click About Tab or View All Link
         try:
+          driver.get(os.path.join(self.linkedin_url, "about"))
+        except:
+        
           self.__find_first_available_element__(
             navigation.find_elements(By.XPATH, "//a[@data-control-name='page_member_main_nav_about_tab']"),
             navigation.find_elements(By.XPATH, "//a[@data-control-name='org_about_module_see_all_view_link']"),
           ).click()
-        except:
-          driver.get(os.path.join(self.linkedin_url, "about"))
-
+          
         _ = WebDriverWait(driver, 3).until(EC.presence_of_all_elements_located((By.TAG_NAME, 'section')))
         time.sleep(3)
 
@@ -251,7 +250,6 @@ class Company(Scraper):
             logo_container = driver.find_element(By.CLASS_NAME, "org-top-card-primary-content__logo-container")
             self.image = logo_container.find_element(By.TAG_NAME, "img").get_attribute('src')
         except Exception as e:
-            print("Not image found")
             self.image = None
 
         if 'Cookie Policy' in driver.find_elements(By.TAG_NAME, "section")[1].text or any(classname in driver.find_elements(By.TAG_NAME, "section")[1].get_attribute('class') for classname in AD_BANNER_CLASSNAME):
