@@ -1,4 +1,4 @@
-# linkedin-agent
+# The Linkedin Agent
 
 This is an AI agent for identifying and contacting potential clients on LinkedIn. It automates the process of navigating through LinkedIn search result pages, extracting company and employee information, and allowing users to send messages to potential clients.
 
