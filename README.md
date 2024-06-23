@@ -87,3 +87,8 @@ To set up and run the LinkedIn agent locally, follow these steps:
 To run tests for the application, use the following command:
 ```sh
 pytest
+```
+
+### Developed By
+
+This project has been developed by Sergio Duran Alvarez, senior ML engineer at Mercedes Benz. Feel free to further develop this agent. For any queries or suggestions, contact me at sduranalvarez.uk@gmail.com.
