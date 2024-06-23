@@ -94,7 +94,7 @@ def get_potential_customers(text: TextInput):
     print("Logged in")
     # Listing all companies
     print("Listing companies")
-    companies_url = linkedinControler.company_listing(driver=driver, n_pages=20)
+    companies_url = linkedinControler.company_listing(driver=driver, n_pages=2)
     # Scrapping, evaluating and filtering companies based on a given threshold
     print("Starting company evaluation")
     companies_db, selected_companies = linkedinControler.company_orchestrator(driver=driver, companies=companies_url, requirements=text.text, threshold=0.6)

@@ -100,9 +100,11 @@ def company_listing(driver:webdriver.Chrome, n_pages:int = 100) -> list:
                     loop += 1
                 except TimeoutException:
                     print("El botón 'Next' sigue sin aparecer después de navegar al final de la página.")
+                    loop += 1
                     break
             except Exception as e:
                 print(f"Ocurrió un error: {str(e)}")
+                loop += 1
                 break
 
     return hrefs
